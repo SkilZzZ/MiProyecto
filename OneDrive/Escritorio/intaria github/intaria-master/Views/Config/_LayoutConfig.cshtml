@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Intaria</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/6c898eea5a.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-1" style="background-color:#0B50A0;width:100%;">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item nav-hover" id="op0">
+                            <a class="nav-link text-white" href="/config">Inicio</a>
+                        </li>
+                        <li class="nav-item nav-hover" id="op1">
+                            <a class="nav-link text-white" href="/config/categorias">Categorías</a>
+                        </li>
+                        <li class="nav-item nav-hover" id="op2">
+                            <a class="nav-link text-white" href="/config/articulos">Artículos</a>
+                        </li>
+                        <li class="nav-item nav-hover" id="op3">
+                            <a class="nav-link text-white" href="/config/clientes">Clientes</a>
+                        </li>
+                        <li class="nav-item nav-hover" id="op4">
+                            <a class="nav-link text-white" href="/config/pedidos">Pedidos</a>
+                        </li>
+                        <li class="nav-item nav-hover" id="op5">
+                            <a class="nav-link text-white" href="/config/carousel">Carousel</a>
+                        </li>
+                        <li class="nav-item nav-hover bg-danger ">
+                            <a asp-action="logout" class="nav-link text-dark" asp-controller="account">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+    <script>
+        URLactual = location.pathname;
+        URLactual = URLactual.toLowerCase();
+
+        if (URLactual == "/" || URLactual == "/config" ) {
+            var id = $('es').attr('class');
+            $('#op0').attr('class', id + ' id_adding');
+        }
+        if (URLactual == "/config/categorias" || URLactual== "/config/categorias/" ) {
+            $('#op1').attr('class', id + ' id_adding');
+        }
+        if (URLactual == "/config/articulos" || URLactual == "/config/articulos/"){
+            $('#op2').attr('class', id + ' id_adding');
+        }
+
+        if (URLactual == "/config/clientes" || URLactual == "/config/clientes/") {
+            $('#op3').attr('class', id + ' id_adding');
+        }
+     //   if (window.location.href.indexOf("Pedidos") != -1 || window.location.href.indexOf("pedidos") != -1) {
+        if (URLactual == "/config/pedidos/" || URLactual == "/config/pedidos"  ) {
+            $('#op4').attr('class', id + ' id_adding');
+        }
+
+        if (URLactual == "/config/carousel") {
+            $('#op5').attr('class', id + ' id_adding');
+        }
+
+    </script>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

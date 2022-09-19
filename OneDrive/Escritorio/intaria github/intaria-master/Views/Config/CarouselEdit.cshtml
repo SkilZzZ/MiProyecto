@@ -1,0 +1,59 @@
+﻿@model Intaria.Models.Carousel
+
+<h3>@(Model.Id == Guid.Empty ? "Nuevo" : "Editar") Carousel </h3>
+
+
+<div class="table-responsive">
+    <form method="POST" name="pri" id="pri" enctype="multipart/form-data">
+
+        <div class="form-group  select-items">
+            <label for="nombre">Titulo</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" aria-describedby="nombreHelp" placeholder="Nombre" value="@Model.Titulo" data-val-required="Este campo no puede estar en blanco." data-val="true">
+            <small data-valmsg-for="nombre" data-valmsg-replace="true" id="nombreHelp" class="form-text text-muted"></small>
+        </div>
+
+        <div class="form-group  select-items ">
+            <label for="descripcion">Descripcion</label>
+            <textarea cols="40" rows="5" style="resize: both" ; type="text" class="form-control cat-textarea" id="descripcion" name="descripcion" aria-describedby="descirpcionHelp" placeholder="Descripcion" data-val-required="Este campo no puede estar en blanco." data-val="true">@Model.Descripcion</textarea>
+            <small data-valmsg-for="descripcion" data-valmsg-replace="true" id="descripcionHelp" class="form-text text-muted"></small>
+        </div>
+
+        <div class="form-group">
+            <label for="fotos">Fotografías</label>
+            <input type="file" class="form-control-file" id="imagen" name="imagen" accept=".jpeg,.jpg,.png">
+        </div>
+
+
+
+        <img style="width:600px" src="~/imagenes-carousel/@Model.Imagen" id="img1" /><br /><br />
+
+
+
+
+
+
+        <a href="/Config/Carousel" class="btn btn-secondary">Volver</a>
+        <button type="submit" class="btn btn-primary">@(Model.Id == Guid.Empty ? "Guardar" : "Actualizar")</button>
+
+
+    </form>
+</div>
+
+<script>
+    function init() {
+        var inputFile = document.getElementById('imagen');
+        inputFile.addEventListener('change', mostrarImagen, false);
+    }
+
+    function mostrarImagen(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var img = document.getElementById('img1');
+            img.src = event.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+
+    window.addEventListener('load', init, false);
+</script>

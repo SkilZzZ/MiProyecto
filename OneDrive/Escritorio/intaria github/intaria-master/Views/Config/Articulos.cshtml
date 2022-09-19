@@ -1,0 +1,107 @@
+﻿@model List<Intaria.Models.Articulo>
+@{ List<Intaria.Models.Categoria> listaCategoria = ViewBag.listaCategoria;
+    var busqueda = ViewBag.busqueda;
+
+    var totalArticulos = ViewBag.totalArticulos;
+    var totalPagina = ViewBag.totalPagina;
+    var pagina = ViewBag.pagina; }
+
+<div>
+    <div class="container-fluid flex-shrink-0">
+        <div class="row justify-content-between  my-2">
+            <h2 class="hh">Articulos en venta</h2>
+            <div class="col-3">
+                <div class="input-group inputbusqueda">
+                    <input type="text" class="form-control" placeholder="Buscar artículo..." aria-label="Entity Search" id="search-q" value="@busqueda">
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="btnagregar d-flex align-items-start d-inline-flex">
+                <a href="/Config/ArticulosEdit" type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Artículo</a>
+            </div>
+        </div>
+    </div><br />
+    <div class="table-responsive">
+
+        <table class="table tablearticulos">
+            <thead>
+                <tr>
+                    <th WIDTH="10" HEIGHT="10">Imagen</th>
+                    <th WIDTH="10" HEIGHT="10">Nombre </th>
+                    <th>Descripcion</th>
+                    <th>Categoria</th>
+                    <th>Precio</th>
+                    <th style="width:42px">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody style="font-family: arial">
+                @foreach (var cat in Model.OrderBy(O => O.IdCategoria))
+                {
+                    if (cat.Estado == "en venta")
+                    {
+
+
+                        Intaria.Models.Categoria nombreCategoria = listaCategoria.FirstOrDefault(C => C.Id == cat.IdCategoria);
+    <tr>
+        <td class="td-img">
+
+            <img class="img-art" src="/fotos/@cat.Id/@cat.NombreArchivo" title="@cat.NombreArchivo" />
+        </td>
+        <td data-titulo="Nombre"> <a class="td-descripcion" href="/config/articulosedit/@cat.Id">@cat.Nombre</a></td>
+        <td data-titulo="Descripcion"><p class="td-descripcion">@cat.Descripcion</p></td>
+        <td data-titulo="Categoria">@nombreCategoria.Nombre</td>
+        <td data-titulo="Precio" class="td-precio-art">@cat.Precio.ToString("#.00") €</td>
+        <td>
+
+            <form method="POST" class="borrar" action="/Config/articulos" data-tipo="el articulo">
+                <input type="hidden" name="Id" value="@cat.Id" />
+                <button type="submit" class="btn btn-danger" title="Borrar"><i class="far fa-trash-alt"></i></button>
+            </form>
+
+        </td>
+    </tr>
+}
+}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+
+                <li class="page-item @(pagina <=0 ? "disabled": "")"><a class="page-link" href="/config/articulos/?pagina=@(pagina-1)">Anterior</a></li>
+                @for (var i = 0; i < totalPagina; i++)
+                {
+    <li class="page-item @(pagina == i ? "active" : "")"><a class="page-link" href="/config/articulos/?pagina=@i">@(i+1)</a></li>}
+                <li class="page-item @(pagina >= (totalPagina-1) ? "disabled": "")"><a class="page-link" href="/config/articulos/?pagina=@(pagina+1)">Siguiente</a></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+<form id="frm-buscar" method="post"><input type="hidden" name="q" value="" /></form>
+@section scripts {
+    <script>
+        $(function () {
+            var debounceTimeout = null;
+            $("#search-q").on("keyup change", function () {
+                var t = $(this);
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(function () {
+                    var v = t.val();
+                    if (v.length < 3 && v.length > 0) return;
+                    search(v);
+                }, 500);
+            });
+
+        })
+        function search(q) {
+            $("#frm-buscar input").val(q);
+            $("#frm-buscar").submit();
+        }
+    </script>
+}

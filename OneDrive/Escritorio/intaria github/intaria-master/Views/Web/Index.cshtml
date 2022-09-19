@@ -1,0 +1,102 @@
+﻿@{ List<Intaria.Models.Carousel> listaFotosCarousel = ViewBag.listaFotosCarousel;
+    List<Intaria.Models.JsonTree> categorias = ViewBag.categorias;
+}
+
+
+
+
+
+
+
+<div class="row flex">
+
+
+    <div class="col-sm-12 col-md-3">
+        <div id="lista-categoriasinicio"></div>
+    </div>
+
+
+    @if (listaFotosCarousel.Count > 0)
+    {
+        <div class="col-sm-12 col-md-9" id="main-content">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+
+                <div class="carousel-inner" id="princi">
+
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        @for (var x = 1; x < listaFotosCarousel.Count; x++)
+                        {
+                            <li data-target="#carouselExampleIndicators" data-slide-to="@x"></li>
+}
+                    </ol>
+
+                    @for (var i = 0; i < listaFotosCarousel.Count; i++)
+                    {
+                        var foto = listaFotosCarousel[i];
+                        <div class="carousel-item @(i==0 ? "active" : "")">
+                            <img src="~/imagenes-carousel/@foto.Imagen" alt="">
+
+                        </div>}
+                </div>
+
+                <div style="margin-bottom:20px;">
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </a>
+                </div>
+            </div>
+        </div>}
+
+
+</div>
+@section scripts  {
+    <script src="~/lib/treeview/treeview.js"></script>
+    <script>
+
+
+
+            $(function () {
+                $('#lista-categoriasinicio').treeview({
+            data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(categorias)),
+            levels: 0
+        });
+        e.preventDefault();
+            });
+
+        $(function () {
+
+            $('#lista-categoriasinicio').on("nodeSelected", function (e) {
+                var selected = $('#lista-categoriasinicio').treeview('getSelected');
+                if (selected != null && selected.length == 1) {
+
+                    loadPartial('/web/articulos', 'main-content', { categoria: selected[0].id });
+                }
+            });
+        });
+
+
+
+        reportWindowSizeIndex();
+        function reportWindowSizeIndex() {
+            const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+            var menu = document.getElementById('lista-categoriasinicio');
+            var menuotro = document.getElementById('slide_menu');
+
+            if (width <= 575) {
+                menu.style.display = 'none';
+
+            } else {
+                menu.style.display = 'inline';
+                menuotro.style.display = 'none';
+                $('#slide_nav_button').text('☰');
+
+            }
+        }
+        window.onresize = reportWindowSizeIndex;
+    </script>
+
+}

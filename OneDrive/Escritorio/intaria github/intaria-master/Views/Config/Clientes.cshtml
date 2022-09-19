@@ -1,0 +1,102 @@
+﻿@model List<Intaria.Models.Usuarios>
+
+@{ var busqueda = ViewBag.busqueda;
+
+    var totalArticulos = ViewBag.totalArticulos;
+    var totalPagina = ViewBag.totalPagina;
+    var pagina = ViewBag.pagina; }
+
+<div class="container-fluid flex-shrink-0">
+    <div class="row justify-content-between  my-2">
+        <h2 class="hh">Lista de clientes</h2>
+
+
+        <div class="col-3">
+            <div class="input-group inputbusqueda">
+                <input type="text" class="form-control" placeholder="Clientes..." aria-label="Entity Search" id="search-q" value="@busqueda">
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="btnagregar d-flex align-items-start d-inline-flex">
+            <a href="/Config/ClientesEdit" type="button" class="btn btn-primary"><img src="~/iconos/clientes.png" /> Nuevo cliente</a>
+        </div>
+    </div>
+</div>
+
+
+    <div class="table-responsive">
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Telefono</th>
+                    <th>Direccion1</th>
+                    <td>&nbsp;</td>
+                </tr>
+            </thead>
+            <tbody>
+    @foreach (var cat in Model.OrderBy(O => O.UserId))
+    {
+    <tr>
+        <td id="campo1"><a  class="td-descripcion" href="/config/ClientesEdit/@cat.UserId">@cat.Nombre</a></td>
+        <td data-titulo="Email">@cat.Email</td>
+
+        <td data-titulo="Telefono">@if (cat.Telefono == 0)
+        {<p>-</p> }
+        else
+        { <p>@cat.Telefono </p>}</td>
+
+        <td id="campodir" data-titulo="Dirección"><p class="td-descripcion">@cat.Direccion1</p></td>
+
+        <td>
+            <form method="POST" class="borrar" action="/Config/clientes" data-tipo="el cliente">
+                <input type="hidden" name="UserId" value="@cat.UserId" />
+                <button type="submit" class="btn btn-danger" title="Borrar"><i class="far fa-trash-alt"></i></button>
+            </form>
+        </td>
+    </tr>}
+            </tbody>
+        </table>
+        </div>
+
+        <div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+
+                    <li class="page-item @(pagina <=0 ? "disabled": "")"><a class="page-link" href="/config/clientes/?pagina=@(pagina-1)">Anterior</a></li>
+                    @for (var i = 0; i < totalPagina; i++)
+                    {
+        <li class="page-item @(pagina == i ? "active" : "")"><a class="page-link" href="/config/clientes/?pagina=@i">@(i+1)</a></li>}
+                    <li class="page-item @(pagina >= (totalPagina-1) ? "disabled": "")" "><a class="page-link" href="/config/clientes/?pagina=@(pagina+1)">Siguiente</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    <form id="frm-buscar" method="post"><input type="hidden" name="q" value="" /></form>
+
+
+    @section scripts {
+        <script>
+            $(function () {
+                var debounceTimeout = null;
+                $("#search-q").on("keyup change", function () {
+                    var t = $(this);
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(function () {
+                        var v = t.val();
+                        if (v.length < 3 && v.length > 0) return;
+                        search(v);
+                    }, 500);
+                });
+
+            })
+            function search(q) {
+                $("#frm-buscar input").val(q);
+                $("#frm-buscar").submit();
+            }
+        </script>
+    }

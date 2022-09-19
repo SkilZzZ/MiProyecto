@@ -1,0 +1,126 @@
+﻿@model List<Intaria.Models.Articulo>
+@{ List<Intaria.Models.Fotos> listaFotos = ViewBag.listaFotos;
+
+    List<Intaria.Models.Categoria> listaCategoria = ViewBag.listaCategoria;
+    var busqueda = ViewBag.busqueda;
+
+    var totalArticulos = ViewBag.totalArticulos;
+    var totalPagina = ViewBag.totalPagina;
+    var pagina = ViewBag.pagina;
+    var i = 0;
+    var cate = ViewBag.cate;
+    var i1 = i + 1;
+     }
+
+
+@foreach (Intaria.Models.Categoria a in listaCategoria)
+{
+
+<input value="@a.Nombre" type="hidden" id="inputcat" />var varcate = a.Nombre;
+            }
+<div class="row justify-content-left align-items-start">
+
+
+
+    @foreach (var cat in Model)
+    {
+        if (cat.Estado == "en venta")
+        {
+<div class="p-2 col-lg-3 biography">
+    <div class="card card-hover ">
+
+        <div class="card-img-top d-flex align-items-center" style="background-color:#fafafa; border-bottom:1px solid #eaeaea">
+            <img class="foto-articulos" style=" display:block; margin:auto;" src="/fotos/@cat.Id/@cat.NombreArchivo" />
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+
+
+                <a href="/articulo/@cat.Nombre.Replace(" ","-")-@cat.Id.ToString().Substring(0,4)" class="nombre-art">@cat.Nombre</a>
+
+            </h5>
+            <div class="card-text d-flex justify-content-between" style="line-height:14px; text-align:center; font-size:14px;">
+                <i class="far fa-star"></i>
+                <div class="flex-grow-1 text-center">@cat.Precio.ToString("#.00") &euro;</div>
+                <button id="agregarcart" data-icon="icons8:buy" data-inline="false" data-id="@cat.Id"><i class="fas fa-cart-plus"></i></button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>}
+
+}
+
+
+
+
+</div>
+
+
+
+
+<div class="container" id="paginacion" style="margin-top:40px">
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+
+            <li id="pageprev" class="page-item @(pagina <=0 ? "disabled": "")"><a  href="#" class="page-link">Prev</a></li>
+
+
+
+            @for (i = 0; i < totalPagina; i++)
+            {
+<li class="@i page-item @(pagina == i ? "active" : "")" value="@i+2"><a href="#"  value="as" class="page-link">@(i+1)</a></li>}
+
+            <li id="pagenext" value="next" name="listanext" class="page-item @(pagina >= (totalPagina-1) ? "disabled": "")"><a href="#"  class="page-link" value="as">Next</a></li>
+        </ul>
+    </nav>
+
+
+
+
+</div>
+
+
+<script>
+    var vainputcat = $("#inputcat").val();
+
+
+    $("button").on("click", function () {
+        var t = $(this);
+
+        $.post("/web/AnadirAlCarrito", { Id: t.data("id") }, function (r) {
+            t.html('✔');
+        });
+    });
+
+
+
+
+
+
+    $(".pagination li").on("click", function () {
+        var otrapagina = $(this).text();
+        
+        if (otrapagina == "Next" ) {
+            var otrapagina = $('.active').val();
+            otrapagina = otrapagina + 2;
+
+        } else if (otrapagina == "Prev" ) {
+            var otrapagina = $('.active').val();
+
+        }
+        if (otrapagina > @totalPagina || otrapagina < 1) {
+        } else {
+
+            $("#resultado-busqueda").load('/web/BuscarArticulosResultado', { otrapagina: otrapagina, vainputcat: vainputcat },
+                function (r) {
+                    hideWorking();
+                }
+            );
+        }
+
+    });
+</script>

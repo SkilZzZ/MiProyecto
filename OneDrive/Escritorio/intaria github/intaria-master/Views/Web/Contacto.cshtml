@@ -1,0 +1,156 @@
+﻿@model LoginViewModel
+
+@{
+                @inject Microsoft.Extensions.Options.IOptions<GoogleConfigModel> googleConfig
+                var EmailUsuariologeado = ViewBag.EmailUsuariologeado;
+                var telefonoUsuariologeado = ViewBag.telefonoUsuariologeado; }
+
+
+
+<head>
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/flatly/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="~/js/jquery.MultiFile.js"></script>
+
+
+</head>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-center align-items-start">
+    <div class="col-sm col-lg-4">
+        <img src="~/img/postman.jpg" style="display: block; margin: auto; width: 100%; height: 100%; object-fit: contain;" />
+    </div>
+    <div class="col-sm col-lg-3">
+        <h1 class="">Contact Us</h1>
+        <strong itemprop="name">Intaria Militaria</strong>
+        <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+            <p class="m-0" itemprop="streetAddress">Calle del Carnero 13</p>
+            <p class="m-0">
+                <span itemprop="postalCode">28005</span>,
+                <span itemprop="addressLocality">Madrid, Spain</span>
+            </p>
+        </div>
+        <p class="m-0">Phone: <span itemprop="telephone"><a href="tel:+34609222175">+34 609 222 175</a></span></p>
+        <p class="m-0">Email: <span itemprop="email"><a href="mailto:intaria@intariamilitaria.com">intaria&#64;intariamilitaria.com</a></span></p>
+        <p class="m-0">
+            Opening hours: Mon-Fri 10-15, Sun 6-15
+            <meta itemprop="openingHours" content="Mo-Fr 10:00-15:00" />
+            <meta itemprop="openingHours" content="Su 06:00-15:00" />
+        </p>
+
+        <div class="my-3">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.0293058570223!2d-3.7110040843475454!3d40.408201564081565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4227d6b090509f%3A0x92a75210a2995c03!2sIntaria%20Militaria!5e0!3m2!1sen!2sus!4v1602498952900!5m2!1sen!2sus"
+                    frameborder="0" style="border:0; width:100%; height:280px" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        </div>
+    </div>
+    <div class="col-sm col-lg-4">
+        <form class="form-horizontal" method="POST" name="pri" id="LoginForm" asp-action="Contacto" enctype="multipart/form-data">
+            <fieldset>
+                <h2>Send us a message</h2>
+
+                @if (User.Identity.Name == null)
+                {
+    <p>Fill the form below to send as a message through the website.</p>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Enter your name here..." aria-label="Enter your name here..." aria-describedby="basic-addon1" name="name">
+
+                    </div>
+
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope-o"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="asd" placeholder="Enter your email here..." aria-label="Enter your email here..." aria-describedby="basic-addon1" name="email">
+
+                                    </div>
+
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="Enter your phone here..." aria-label="Enter your phone here..." aria-describedby="basic-addon1" name="phone">
+
+                                                    </div> }
+                                                else
+                                                {
+
+                                    <input class="nomodificaremail" type="hidden" value="@EmailUsuariologeado" name="email">
+                                     <input class="nomodificartelefono" type="hidden" value="@telefonoUsuariologeado" name="phone">}
+
+
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Message</label>
+                    <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Enter your message here"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group-prepend botonInputFileModificado">
+                        <input name="enviarfiles" type="file" accept=".jpeg,.jpg,.png" multiple class="with-preview inputImagenOculto" />
+                        <i><span class="iconify" data-icon="fa-solid:folder-open" data-inline="false"></span> Browser...</i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group-prepend">
+                        <div id="myList"></div>
+                    </div>
+                </div>
+                <input type="hidden" asp-for="captcha" />
+
+
+                <button class="g-recaptcha btn btn-primary btn-lg"
+                        data-sitekey="@googleConfig.Value.Key"
+                        data-callback='onSubmit'
+                        data-action='submit'>
+                    Send
+                </button>
+
+
+
+
+            </fieldset>
+        </form>
+    </div>
+
+</div>
+
+
+
+<script>
+    $('.with-preview').MultiFile({
+        list: '#myList',
+        max: 5,
+        error: function (s) {
+            if (typeof console != 'undefined') console.log(s);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: s
+            })
+        }
+    });
+
+
+
+</script>
+
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+

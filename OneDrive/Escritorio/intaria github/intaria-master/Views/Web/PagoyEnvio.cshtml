@@ -1,0 +1,970 @@
+﻿@model List<Intaria.Models.Articulo>
+@using Microsoft.Extensions.Options
+@inject IOptions<Intaria.Models.StripeSettings> Stripe
+
+@{ List<Intaria.Models.Articulo> articulos = ViewBag.articulos;
+    var ultimoano = ViewBag.ultimoano;
+    List<Intaria.Models.Categoria> listaCategoria = ViewBag.listaCategoria;
+    var infousuario = ViewBag.infousuario;
+    List<Intaria.Models.Fotos> listaFotos = ViewBag.listaFotos;
+    var EmailUsuariologeado = ViewBag.EmailUsuariologeado;
+    var cont = 0;
+    var total = 0;
+    var letracont = "p";
+    var cantidadcont = "c";
+    var filacont = "f";
+    var totalprincipio = 0;
+    var apaypal = 0;
+    var signos = "signos";
+    var idpedidos = "";
+}
+
+
+
+<!-- Modal para pagar con Tarjeta -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form method="post" id="payment-form">
+                <div class="cell example example3" id="example-3">
+
+                    <div class="fieldset" id="modaltarjeta">
+
+                        <label class="lab-credit" for="card-number">Credit card number</label>
+                        <span id="example3-card-number" class="form-control">
+                            <!-- Stripe -->
+                        </span>
+
+                        <div class="input-group mb-2">
+
+                            <label class="lab-exp" for="card-exp"> Expiration</label>
+                            <label class="lab-cvc" for="card-cvc"> CVC Number</label>
+                        </div>
+
+                        <div class="input-group mb-2">
+                            <span id="example3-card-expiry" class="form-control ">
+                                <!-- Stripe -->
+                            </span>
+                            <span id="example3-card-cvc" class="form-control">
+                                <!-- Stripe -->
+
+                            </span>
+                        </div>
+
+
+                        <input class="StripeToken" name="Token" type="text" />
+                        <input name="Total" class="totalcontarjeta" value="100" type="text" />
+                        <input type="text" value="tarjeta" name="TipoPago" />
+
+                        <input name="Email" value="@EmailUsuariologeado" type="email" />
+                        <button type="submit" id="botonpagotarjeta"><i>Pay<i class="totalcontarjeta">   @(total*1.014) € </i></i></button>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@if (Model.Count > 0)
+{
+
+
+
+
+
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+
+
+
+    <!-- For DocRaptor -->
+    <!-- For pdfmake -->
+    <script src="~/js/pdf/pdfmake.0.1.68.min.js"></script>
+    <script src="~/js/pdf/pdfmake.vfs_fonts.0.1.68.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="form-group">
+
+        <div class="container">
+            <div class="row ">
+                <div class="col-8">
+
+                    <div class="row justify-content align-items-start">
+                        <img src="~/img/LOGO2.png" style="width:80px;height:80px;" />
+                        <h1>Payment and shipping</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <div class="container">
+            <div class="row ">
+                <div class="col-8 border">
+                    <div class="form-group">
+
+                        <h3><strong>payment methods</strong></h3>
+                    </div>
+
+                    <div class=" border-top form-group">
+                        <div class="form-group">
+                            <label>
+                                <input class="pago" name="pago1" type="radio" style="width: 20px; height: 20px" id="tarjeta" value="tarjeta" />
+                                <strong>Credit or debit card</strong>
+
+                            </label>
+                        </div>
+
+                        <img src="~/img/targets.png" style="width:150px;" />
+                        <img src="~/img/tarjeta china.jpg" style="width:40px;" />
+                        <img src="~/img/JCB_logo.svg" style="width:38px;" />
+
+                        <!--  <span class="iconify" data-icon="cib:cc-stripe" data-inline="false" style="color:blue;margin:3px" width="30"></span>-->
+
+
+
+
+
+                    </div>
+
+
+                    <div class="row border-top">
+                        <div class="form-group">
+
+                            <input name="pago1" id="pagopaypal" class="pago" type="radio" style="width: 20px; height: 20px" value="paypal" />
+                            <img src="~/img/paypalll.jpg" style="width:200px;" />
+                            <p>Send by payment friend to this address <strong> hilmarbell@gmail.com</strong></p>
+                            <div id="divpaypal" style="display:none;">
+                                <p>
+                                    send pdf, image or notify the email intaria@intariamilitaria.com or 609222175 to confirm the payment as soon as possible
+
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row border-top">
+                        <div class="form-group">
+
+                            <input name="pago1" id="pagopaypal" class="pago" type="radio" style="width: 20px; height: 20px" value="bankia" />
+                            <h1>PAYMENT WITHOUT COMMISSIONS </h1>
+                            <i>BANKIA  IBAN: <strong> ES44 2038 1127 9160 0049 2315</strong></i><br />
+                            <i>Send through paypal by friend payment to this address <strong> hilmarbell@gmail.com</strong></i><br />
+                            <i>Send through westernunion in the name of Carlos Bell to this address<strong> hilmarbell@gmail.com</strong></i>
+
+                            <div id="divbankia" style="display:none;">
+                                <p>
+                                    send pdf, image or notify the email intaria@intariamilitaria.com or 609222175 to confirm the payment as soon as possible
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row border-top" id="sincom" style="display:none">
+                        <div class="form-group">
+                            <h3 precio="@total">TOTAL: <strong name="total" class="totalsincomisiones">@total.ToString("#.00") €</strong></h3>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="form-group">
+
+        <div class="container ">
+            <div class="row ">
+                <div class="col-30 colpagos border">
+
+                    <h1>Send to</h1>
+
+
+                    @foreach (Intaria.Models.Usuarios info in infousuario)
+                    {
+                        if (info.Direccion1 != null)
+                        {
+                            <div>
+                                <input type="radio" id="huey" name="drone" value="huey" checked>
+                                <label for="huey"> @info.Direccion1</label>
+                            </div> }
+
+                        if (info.Direccion2 != null)
+                        {
+                            <div>
+                                <input type="radio" id="dewey" name="drone" value="dewey">
+                                <label for="dewey">@info.Direccion2</label>
+                            </div>}
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <form class="form-horizontal" method="POST" name="pri" id="pri" enctype="multipart/form-data">
+
+
+
+        <div class="container" id="ListaArticulospdf">
+            <h3 id="listaArticulos"> there are @Model.Count items in the list</h3>
+
+            <input type="text" size="100" name="articulos" />
+
+
+            <div class="row">
+                <div class="col-sm-12 col-md-10 col-md-offset-1">
+                    <div class="table-responsive">
+
+                        <table class="table table-hover" id="tablapago">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center">Total</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (Intaria.Models.Articulo a in Model)
+                                {
+                                    totalprincipio = totalprincipio + a.Precio;
+                                    idpedidos = idpedidos + a.Id + ",";
+
+                                }
+
+
+
+
+                                @foreach (Intaria.Models.Articulo a in Model)
+                                {
+                                    filacont = filacont + 1;
+                                    cont = cont + 1;
+                                    total = total + a.Precio;
+                                    letracont = letracont + cont;
+                                    cantidadcont = cantidadcont + cont;
+                                    signos = signos + cont;
+                                    apaypal = total + (total * 34 / 1000);
+
+
+                                    <tr class="@filacont">
+                                        <td class="col-sm-8 col-md-6">
+                                            <div class="media">
+                                                <a class="thumbnail pull-left" href="#"> <img src="~/fotos/@a.Id/@a.NombreArchivo" style="width: 90px; height: 90px;"> </a>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading nombre-art"><a href="#">@a.Nombre</a></h4>
+                                                    <span>
+                                                        @foreach (Intaria.Models.Categoria cat in listaCategoria)
+                                                        {
+                                                            if (cat.Id == a.IdCategoria)
+                                                            {
+                                                                <p>Category: @cat.Nombre</p>}
+
+                                                        }
+                                                    </span><span class="text-success"><strong></strong></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td data-titulo="quantity" class="col-sm-1 col-md-1" style="text-align: center">
+                                            <input type='number' style="width:50px" name="contador" readonly class="@cantidadcont" value="1">
+
+                                            <input type="button" value="+" class="@signos" />
+                                            <input type="button" value="-" class="@signos" />
+
+
+
+                                        </td>
+                                        <td data-titulo="price" class="col-sm-1 col-md-1 text-center"><strong>@a.Precio.ToString("#.00") €</strong></td>
+                                        <td data-titulo="total-price" class="col-sm-1 col-md-1 text-center">
+                                            <strong>
+                                                <p class="@letracont"><strong>@a.Precio.ToString("#.00") €</strong></p>
+                                            </strong>
+                                        </td>
+                                        <td class="col-sm-1 col-md-1">
+                                            <button type="button" class="btn btn-danger" id="@filacont" data-id="@a.Id">
+                                                <span class="glyphicon glyphicon-remove"></span> Remove
+
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <script>
+
+
+
+                           $('input[name=articulos]').val("@idpedidos".slice(0, -1));
+
+
+
+                                                var value = ''
+                                                var total = @total;
+                                                var totalunidades = 0;
+                                                var acum = 0;
+                                                var acumremove = 0;
+                                                var iNum = 0;
+                                                var listaArticulos = @Model.Count;
+                                                var totalpaypalcomis = 0;
+                                                var paypaltotal = 0;
+                                                $(document).ready(function() {
+                                                    $("button#@filacont").click(function() {
+
+                                                        var t = $(this);
+
+
+                                                        $.post("/web/AnadirAlCarrito", {
+                                                            Id: t.data("id"),
+                                                            Remove: "si"
+                                                        }, function(r) {
+
+                                                        });
+
+
+
+                                                        listaArticulos = listaArticulos - 1;
+
+                                                        if (listaArticulos == 0) {
+                                                            $('body').replaceWith("<h1>No article has been added</h1>");
+                                                        }
+
+                                                        $('#listaArticulos').html('there are ' + listaArticulos + " items in the list");
+
+
+
+                                                        var texto = $("p.@letracont").text();
+                                                        iNum = parseInt(texto);
+                                                        acum = acum - iNum;
+
+                                                        $(".@filacont").remove();
+
+
+                                                        $('.totalcart').html(acum + total + ',00 €');
+                                                        $('.totalsincomisiones').html(total + acum + ',00 €');
+
+
+                                                        $('#totalcartmasenvio').html(total + acum + 5 + ',00 €');
+
+
+                                                        totalpaypalcomis = total + acum;
+                                                        paypaltotal = totalpaypalcomis + totalpaypalcomis * 0.034;
+                                                        tarjetatotal = totalpaypalcomis + totalpaypalcomis * 0.014;
+
+                                                        tarjetatotal = totalpaypalcomis + totalpaypalcomis * 0.014;
+                                                        if (paypaltotal <= 125) {
+                                                            $('#cincoeuros').html("Subtotal + 5,00 €:");
+                                                            paypaltotal = 5 + totalpaypalcomis + totalpaypalcomis * 0.034;
+                                                        }
+                                                        else {
+                                                            $('#totalcartmasenvio').html(total + acum + ',00 €');
+                                                            $('#cincoeuros').html("FREE");
+                                                        }
+                                                        $('.totalconpaypal').html(paypaltotal.toFixed(2) + ' €');
+                                                        $('.totalcontarjeta').html(tarjetatotal.toFixed(2) + ' €');
+                                                        $('.totalcontarjeta').val(tarjetatotal.toFixed(2) + ' €');
+
+
+
+                                                        prub();
+
+                                                    });
+
+                                                    $(".@signos").click(function() {
+
+                                                        totalunidades = $(".@cantidadcont").val();
+                                                        value = $(this).val();
+
+
+                                                        if (value == '+' && @a.Cantidad > totalunidades) {
+                                                            totalunidades = totalunidades - (-1);
+                                                            acum = acum + @a.Precio;
+
+                                                        } else if (value == '-' && totalunidades > 1) {
+                                                            totalunidades = totalunidades - 1;
+                                                            acum = acum - @a.Precio;
+                                                        } else if (value == '-' && totalunidades == 1) {
+                                                            alert("you cannot select a null quantity")
+                                                        } else {
+                                                            alert("No more items in inventory")
+                                                        }
+
+
+
+
+
+                                                        $(".@cantidadcont").val(totalunidades)
+                                                        $(".@cantidadcont").text(totalunidades)
+
+
+                                                        $('.@letracont').html($('.@cantidadcont').val() * @a.Precio + ',00 €');
+
+
+                                                        $('.totalcart').html(acum + total + ',00 €');
+                                                        $('.totalsincomisiones').html(total + acum + ',00 €');
+
+
+                                                        $('#totalcartmasenvio').html(total + acum + 5+',00 €');
+
+
+                                                        totalpaypalcomis = total + acum;
+                                                        paypaltotal = totalpaypalcomis + totalpaypalcomis * 0.034;
+                                                        tarjetatotal = totalpaypalcomis + totalpaypalcomis * 0.014;
+
+                                                        if (paypaltotal <= 125) {
+                                                            $('#cincoeuros').html("Subtotal + 5,00 €:");
+                                                            paypaltotal = 5 + totalpaypalcomis + totalpaypalcomis * 0.034;
+                                                        }
+                                                        else {
+                                                            $('#totalcartmasenvio').html(total + acum  + ',00 €');
+                                                            $('#cincoeuros').html("FREE");
+                                                        }
+                                                        $('.totalconpaypal').html(paypaltotal.toFixed(2) + ' €');
+                                                        $('.totalcontarjeta').html(tarjetatotal.toFixed(2) + ' €');
+                                                        $('.totalcontarjeta').val(tarjetatotal.toFixed(2) + ' €');
+
+                                                        prub();
+                                        
+                                                        cuentacantidad();
+
+                                                    });
+
+
+                                                    totalpaypalcomis = total + acum;
+                                                    paypaltotal = totalpaypalcomis + totalpaypalcomis * 0.034;
+                                                    tarjetatotal = totalpaypalcomis + totalpaypalcomis * 0.014;
+
+                                                    if (paypaltotal <= 125) {
+                                                        $('#cincoeuros').html("Subtotal + 5,00 €:");
+                                                        paypaltotal = 5 + totalpaypalcomis + totalpaypalcomis * 0.034;
+                                                    }
+                                                    else {
+                                                        $('#totalcartmasenvio').html(total + acum + ',00 €');
+                                                        $('#cincoeuros').html("FREE");
+                                                    }
+                                                    $('.totalconpaypal').html(paypaltotal.toFixed(2) + ' €');
+                                                    $('.totalcontarjeta').html(tarjetatotal.toFixed(2) + ' €');
+                                                    $('.totalcontarjeta').val(tarjetatotal.toFixed(2) + ' €');
+
+
+                                                    $('.totalsincomisiones').html(total + acum + ',00 €');
+
+                                                    prub();
+
+
+                                                });
+
+
+
+
+
+
+
+                                    </script>
+                                }
+
+
+                                <tr>
+                                    <td>   </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <h3 class="text-left">Subtotal:</h3>
+
+                                    </td>
+                                    <td colspan="3" style="text-align:right">
+                                        <h3><strong name="total" class="totalcart">@total.ToString("#.00") €</strong></h3>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        If the subtotal of the order is greater than 121,00 € it will be free
+
+                                    </td>
+                                    <td colspan="2">
+                                        <h4>Shipping costs</h4>
+
+                                    </td>
+
+                                    @if (total <= 125)
+                                    {
+                                        <td>
+
+                                            <h3 class="text-right" id="cincoeuros">Subtotal + 5,00 €:</h3>
+                                        </td>
+                                        <td colspan="2" style="text-align:right">
+                                            <h3><strong name="total" id="totalcartmasenvio">@(total - (-5)),00 €</strong></h3>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="text-align:center">
+                                            <h3>FREE</h3>
+                                        </td>
+                                        <td colspan="2" style="text-align:right">
+                                            <h3><strong name="total" class="totalcart">@total.ToString("#.00") €</strong></h3>
+                                        </td>
+                                    }
+                                </tr>
+
+
+
+                                <tr>
+                                    <td>
+                                        <h3 class="text-right">Total:</h3>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <h3 id="h3paypal" style="display:none"> Paypal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; commissions</h3>
+                                        <h3 id="h3tarjeta" style="display:none"> Target &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; commissions</h3>
+
+                                    </td>
+
+                                    <td colspan="2" style="text-align:center">
+                                        <h5 id="porcenpaypal" style="display:none">3,4 %</h5>
+                                        <h5 id="porcentarjeta" style="display:none">1,4 %</h5>
+                                        <h5 id="porcenotros" style="display:none">0,00 %</h5>
+
+
+                                    </td>
+                                    <td colspan="2" style="text-align:right">
+
+                                        <h3><strong style="display:none" name="total" id="paypalll" class="totalconpaypal">@(total * 1.034)</strong></h3>
+                                        <h3><strong style="display:none" name="total" id="tarjetaaa" class="totalcontarjeta">@(total * 1.014)</strong></h3>
+                                        <h3><strong style="display:block" name="total" class="totalsincomisiones">@total.ToString("#.00") €</strong></h3>
+
+                                    </td>
+                                </tr>
+
+
+
+                                <tr>
+
+
+                                    <td colspan="2" style="text-align:right">
+                                        <a href="/" class="btn btn-secondary">Continue shopping</a>
+                                    </td>
+                                    <td colspan="4">
+                                        <div id="paypal-button" style="display:none;float:right"></div>
+                                        <button id="botontarjeta" style="display:none" type="button" class="btn btn-success  btn-block" data-toggle="modal" data-target="#exampleModalLong">
+                                            Checkout
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+
+    <table id="styledTable" style="display:none">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{cont = 0;
+                letracont = "p";
+                filacont = "f";
+                cantidadcont = "c";
+
+            }
+            @foreach (Intaria.Models.Articulo a in Model)
+            {
+                filacont = filacont + 1;
+                cont = cont + 1;
+                cantidadcont = cantidadcont + cont;
+                letracont = letracont + cont;
+
+                <tr id="" class="@filacont oddrow">
+                    <td>@a.Nombre</td>
+                    <td class="@cantidadcont">
+                        1
+                    </td>
+                    <td>@a.Precio €</td>
+                    <td >
+                        <strong class="@letracont"><strong>@a.Precio.ToString("#.00") €</strong></strong>
+                    </td>
+                </tr>
+            }
+
+        <tr>
+            <td style=" border: red 5px solid; "></td>
+            <td></td>
+            <td><h2>TOTAL:</h2></td>
+
+            <td>
+                <h3><strong name="total" id="totalfactura"></strong></h3>
+            </td>
+
+        </tr>
+   
+        </tbody>
+
+    </table>
+
+
+
+
+
+
+
+
+    <!-- PDF export methods I wrote using the libraries above -->
+    <script src="~/js/pdf/pdfExportMethods.js"></script>
+
+
+
+
+
+
+
+
+    <script>
+
+        var preciototal = 0;
+
+        var numero=@apaypal;
+        var conDecimal =numero.toFixed(2);
+
+        var totalfactura = "";
+        $('input[type="radio"]').on('change', this, function () {
+            var valradio = $(this).val();
+
+
+
+
+
+            if (valradio == 'bankia') {
+
+                totalfactura = $('.totalsincomisiones').html();
+                alert(totalfactura);
+
+
+                $("#divbankia").css("display", "block");
+                $("#divpaypal").css("display", "none");
+                $("#botontarjeta").css("display", "none");
+                $("#compratarjeta").css("display", "none");
+                $("#h3tarjeta").css("display", "none");
+                $("#h3paypal").css("display", "none");
+                $("#paypal-button").css("display", "none");
+                $(".totalconpaypal").css("display", "none");
+                $(".totalcontarjeta").css("display", "none");
+                $("#porcentarjeta").css("display", "none");
+                $("#porcenpaypal").css("display", "none");
+                $("#porcenotros").css("display", "block");
+                $(".totalsincomisiones").css("display", "block");
+                $("#sincom").css("display", "block");
+
+                $('#totalfactura').html(totalfactura);
+
+
+
+            } else if (valradio == 'paypal') {
+
+
+                totalfactura = $('.totalconpaypal').html();
+
+                $("#divpaypal").css("display", "block");
+                $("#divbankia").css("display", "none");
+                $("#paypal-button").css("display", "block");
+                $("#botontarjeta").css("display", "none");
+                $("#compratarjeta").css("display", "none");
+                $("#h3paypal").css("display", "block");
+                $("#h3tarjeta").css("display", "none");
+                $(".totalconpaypal").css("display", "block");
+                $(".totalcontarjeta").css("display", "none");
+                $("#porcentarjeta").css("display", "none");
+                $("#porcenpaypal").css("display", "block");
+                $("#porcenotros").css("display", "none");
+                $(".totalsincomisiones").css("display", "none");
+                $("#sincom").css("display", "none");
+
+                alert(totalfactura);
+
+                $('#totalfactura').html(totalfactura);
+
+
+            } else if (valradio == 'tarjeta') {
+
+
+                 totalfactura = document.querySelectorAll(".totalcontarjeta")[0].textContent;
+
+
+                $("#divpaypal").css("display", "none");
+                $("#divbankia").css("display", "none");
+                $("#paypal-button").css("display", "none");
+                $("#botontarjeta").css("display", "block");
+                $("#compratarjeta").css("display", "block");
+                $("#h3paypal").css("display", "none");
+                $("#h3tarjeta").css("display", "block");
+                $(".totalconpaypal").css("display", "none");
+                $(".totalcontarjeta").css("display", "block");
+                $("#porcentarjeta").css("display", "block");
+                $("#porcenpaypal").css("display", "none");
+                $("#porcenotros").css("display", "none");
+                $(".totalsincomisiones").css("display", "none");
+                $("#sincom").css("display", "none");
+
+
+                alert(totalfactura);
+                $('#totalfactura').html(totalfactura);
+
+
+
+            }
+
+            downloadPDFWithPDFMake()
+
+        })
+
+        function cuentacantidad() {
+            var nomapes = document.getElementsByName("contador");
+            // los convertimos a un array bidimensional
+            // el primer elemento sera un array con los nombres
+            // el segundo elemento sera un array con los dnis
+            aArray = [
+                [...nomapes].map(el => el.value),
+            ];
+
+            var table = document.getElementById("tablapago");
+            var rowCount = table.rows.length;
+
+            for (var i = 0; i < rowCount - 1; i++) {
+                if (i == 0) {
+                    var cantidad = aArray[i]
+                }
+            }
+
+            alert(cantidad)
+            var preciototal = document.querySelectorAll("#tarjetaaa")[0].textContent;
+            preciototal = parseInt(preciototal);
+
+            completadopago(preciototal, cantidad)
+        }
+
+    </script>
+
+    <script>
+
+        //pagar con paypal
+        function prub() {
+            var as = $('.totalconpaypal').text();
+            conDecimal = paypaltotal.toFixed(2);
+        }
+        paypal.Button.render({
+            // Configure environment
+            env: 'sandbox', // Optional: specify 'sandbox' environment
+            client: {
+                sandbox: 'AaxaR-Kbem3S2vsWBdEpTKjUmK8Y0ZCetQZt-HdwRIVLilXAAY8WUviDlBSvOj2klIoLGNnjLjSGyz25',
+                production: 'AfLVCJLxz4XxEGYJsNKhS6PRBg2XuuFsGfWdiixIJyoobqMT20kXUuDfB1X18rC5-QnpzavR2SBCRo7d'
+            },
+            // Customize button (optional)
+            locale: 'en_US',
+            style: {
+                size: 'medium',
+                color: 'gold',
+                shape: 'pill',
+            },
+
+            // Enable Pay Now checkout flow (optional)
+            commit: true,
+
+            // Set up a payment
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: conDecimal,
+                            currency: 'EUR'
+                        }
+                    }]
+                });
+            },
+            // Execute the payment
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute().then(function () {
+                    // Show a confirmation message to the buyer
+                    var preciototal = document.querySelectorAll(".totalconpaypal")[0].textContent;
+                    preciototal = parseInt(preciototal);
+                    completadopago(preciototal);
+                });
+            }
+        }, '#paypal-button');
+
+
+
+
+        //Pagar con tarjeta
+
+        $(document).ready(function () {
+
+            var stripe = Stripe('pk_test_51IS4HRItUNYMGyQ5n3zTq8QFs7q3Wu4LibBWKNmlbKwq8lpc18ksVEHN5CGcnqA3HbQnk20HftLY2oW0UUrsi7iw00sx5eoe21');
+
+            var elements = stripe.elements();
+
+            var style = {
+                base: {
+                    'lineHeight': '1.35',
+                    'fontSize': '1.11rem',
+                    'color': '#495057',
+                }
+            };
+
+            // Card number
+            var card = elements.create('cardNumber', {
+                'placeholder': '',
+                'style': style
+            });
+
+            card.mount('#example3-card-number');
+
+            //CVC
+
+            var cvc = elements.create('cardCvc', {
+                'placeholder': '',
+                'style': style
+            });
+            cvc.mount('#example3-card-cvc');
+
+            // Card expiry
+            var exp = elements.create('cardExpiry', {
+                'placeholder': '',
+                'style': style
+            });
+
+            exp.mount('#example3-card-expiry');
+
+            var form = document.getElementById('payment-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                stripe.createToken(card).then(function (result) {
+                    if (result.error) {
+                        var errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = result.error.message;
+                    }
+                    else {
+                        stripeTokenHandler(result.token);
+                        console.log(result.token);
+                    }
+                });
+            });
+
+            alert($(".Stripetoken").val(token.id));
+
+            //Submit the form with the token ID
+
+            function stripeTokenHandler(token) {
+                $(".StripeToken").val(token.id);
+                form.submit();
+                alert("se activa");
+                var preciototal = document.querySelectorAll("#tarjetaaa")[0].textContent;
+                preciototal = parseInt(preciototal);
+                completadopago(preciototal);
+            }
+        });
+
+
+
+        var preciototal = document.querySelectorAll("#tarjetaaa")[0].textContent;
+        preciototal = parseInt(preciototal);
+
+
+
+
+
+
+        function completadopago(preciototal, cantidad) {
+
+            alert("completadopago precio total" + preciototal)
+
+            cantidad = cantidad.toString();
+            alert("completadopago la cant es" + cantidad)
+
+            var email = document.getElementsByName('Email')[0].value;
+            var articulos = document.getElementsByName('articulos')[0].value;
+
+            
+            $.post("/web/completadopago", {
+                email: email,
+                articulos: articulos,
+                totalpedido: preciototal,
+                cantidad: cantidad
+            }, function (r) { });
+            
+        }
+    </script>
+
+}
+else
+{
+    <h1>No article has been added</h1>}

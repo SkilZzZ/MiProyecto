@@ -1,0 +1,36 @@
+﻿@model List<Intaria.Models.Articulo>
+@{
+    List<Intaria.Models.Categoria> listaCategoria = ViewBag.listaCategoria;
+
+}
+
+
+
+<table>
+    @foreach (var cat in Model)
+    {
+        Intaria.Models.Categoria nombreCategoria = listaCategoria.FirstOrDefault(C => C.Id == cat.IdCategoria);
+        <tr data-id="@cat.Id" class="suma">
+            <td style="width:50px">
+                <img class="img-art" src="/fotos/@cat.Id/@cat.NombreArchivo" title="@cat.NombreArchivo" style="display:block; min-width:50px; max-width:50px; width:100%; max-height:50px;" />
+            </td>
+            <td class="td-nombre_cat-art" style="max-width: 0;">
+                <div style="text-overflow:ellipsis; overflow:hidden; white-space: nowrap;">
+                    <a href="/config/articulosedit/@cat.Id" title="@cat.Nombre">@cat.Nombre</a>
+                </div>
+            </td>
+            <td class="td-descripcion" style="max-width: 0;">
+                <div style="text-overflow:ellipsis; overflow:hidden; white-space: nowrap;">@cat.Descripcion</div>
+            </td>
+            <td class="td-nombre_cat-art">@(nombreCategoria != null ? nombreCategoria.Nombre : "-")</td>
+            <td>@cat.Precio €</td>
+            <td>
+                <a href="#" class="btn btn-sm btn-secondary bnPonerArticulo"><i class="fa fa-plus"></i></a>
+                <a href="#" class="btn btn-sm btn-danger bnQuitarArticulo"><i class="fa fa-trash"></i></a>
+
+            </td>
+        </tr>
+    }
+
+</table>
+

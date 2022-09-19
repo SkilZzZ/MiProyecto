@@ -1,0 +1,50 @@
+﻿@*model List<Intaria.Models.Categoria> *@
+@{
+    List<Intaria.Models.JsonTree> categorias = ViewBag.categorias;
+}
+
+@{
+    var Listamenucategorias = ViewBag.Listamenucategorias; }
+
+
+
+<div id="lista-categorias"></div>
+
+
+
+
+<script>
+
+
+    $(function () {
+        $('#lista-categorias').treeview({
+            data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(categorias)),
+            levels: 0
+        });
+        e.preventDefault();
+        showModal('/web/categoriasmenu', 'mdlArticulo');
+    });
+
+        $(function () {
+
+        $('#lista-categorias').on("nodeSelected", function (e) {
+            var selected = $('#lista-categorias').treeview('getSelected');
+            if (selected != null && selected.length == 1) {
+                if ($("#slide_nav_button").is(":visible")) {
+                    $("#slide_menu").slideUp();
+                    $('#slide_nav_button').text('☰');
+
+                }
+
+                loadPartial('/web/articulos', 'main-content', { categoria: selected[0].id });
+            }
+        });
+
+
+        });
+
+
+
+
+
+</script>

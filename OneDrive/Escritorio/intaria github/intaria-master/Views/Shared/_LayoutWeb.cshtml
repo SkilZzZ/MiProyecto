@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="~/videos/LOGO2.png">
+    <title>@ViewData["Title"] - Intaria Milita</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/web.css" />
+    <link href="~/lib/treeview/treeview.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+</head>
+
+
+
+
+<body>
+
+    <header>
+
+        <div id='slide_menu'>
+            <partial name="/Views/Web/prueba/_categoriasmenu.cshtml" />
+
+        </div>
+
+
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light  border-bottom box-shadow mb-3" style="background: #1c2c51; color: white; ">
+            <div class="container-fluid" id='slide_nav'>
+                <p id="slide_nav_button" class="navbar-brand text-white">☰</p>
+
+
+
+                <a class="navbar-brand text-white" asp-area="" asp-controller="/" asp-action="Index" id="op0">Intaria Militaria</a>
+                <button style="float:right" class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span width="32" class="iconify" data-icon="vscode-icons:file-type-config" data-inline="false"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1 ">
+
+
+                        <li class="nav-item nav-hover" id="op1">
+                            <a href="/Contact" class="nav-link text-white">Contact</a>
+                        </li>
+
+
+                        @if (User.Identity.Name != null)
+                        {
+
+            <li class="nav-item nav-hover">
+                <h4>WELCOME @User.Identity.Name</h4>
+            </li>
+
+                            <li class="nav-item nav-hover" id="op3">
+                                <a href="/Myaccount" class="nav-link text-white">My account</a>
+                            </li>
+
+                                            <li class="nav-item nav-hover">
+                                                <a asp-action="logout" class="nav-link text-white" asp-controller="account">
+                                                    Logout
+                                                </a>
+                                            </li> }
+                                                        else
+                                                        {
+                                            <li class="nav-item nav-hover" id="op3">
+                                                <a href="~/account/login" class="nav-link text-white">Login or Register</a>
+                                            </li>}
+
+                        <li id="op6">
+                            <a href="~/cart" class="nav-link text-white"><span class="iconify" data-icon="bi:cart-fill" data-inline="false"></span>Cart</a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+        </nav>
+    </header>
+
+
+
+
+    <div class="container-fluid" id="content">
+        @RenderBody()
+    </div>
+
+    <footer class="border-top footer row align-bottom footer">
+        <div class="col-md" itemscope itemtype="https://schema.org/Organization">
+            <h6>Contact Us</h6>
+            <strong itemprop="name">Intaria Militaria</strong>
+            <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                <p itemprop="streetAddress">Calle del Carnero 13</p>
+                <p>
+                    <span itemprop="postalCode">28005</span>,
+                    <span itemprop="addressLocality">Madrid, Spain</span>
+                </p>
+            </div>
+            <p>Phone: <span itemprop="telephone"><a href="tel:+34609222175">+34 609 222 175</a></span></p>
+            <p>Email: <span itemprop="email"><a href="mailto:intaria@intariamilitaria.com">intaria&#64;intariamilitaria.com</a></span></p>
+            <p>
+                Opening hours: Mon-Fri 10-15, Sun 6-15
+                <meta itemprop="openingHours" content="Mo-Fr 10:00-15:00" />
+                <meta itemprop="openingHours" content="Su 06:00-15:00" />
+            </p>
+        </div>
+
+        <div class="col-md">
+            <h6>Other Shops</h6>
+            <p><a target="_blank" href="https://www.todocoleccion.net/tienda/intaria">todocoleccion</a></p>
+            <p><a target="_blank" href="https://www.ebay.es/usr/intariamilitaria">ebay</a></p>@*
+                <p><a target="_blank" href="#"><i class="fas fa-store"></i> Shop Madrid</a></p>
+                <p><a target="_blank" href="#"><i class="fas fa-store"></i> Shop Asturias</a></p>*@
+        </div>
+
+        <div class="col-md">
+            <h6>Media</h6>
+
+            <p><a target="_blank" href="https://www.facebook.com/militariaintaria/"><i class="fab fa-facebook-square"></i> Facebook</a></p>
+            <p><a target="_blank" href="https://twitter.com/intariam"><i class="fab fa-twitter-square"></i> Twitter</a></p>
+            <p><a target="_blank" href="https://www.instagram.com/historiccollectibles/"><i class="fab fa-instagram-square"></i> Instagram</a></p>
+        </div>
+
+        <div class="col-md">
+            <h6>Informaci&oacute;n</h6>
+            <p><a href="~/Termsofsale">Terms of sale</a></p>
+            <p><a href="~/privacy">Privacy Policy</a></p>
+            <p><a href="~/About-us">About us</a></p>
+
+        </div>
+
+    </footer>
+
+
+
+
+    <script type="text/javascript">
+
+    </script>
+
+
+
+
+    <script>
+
+
+
+        URLactual = location.pathname;
+        URLactual = URLactual.toLowerCase();
+
+
+        function reportWindowSize() {
+
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+            var cartera = document.getElementById('op6');
+
+            if (vw <= 575) {
+
+
+            } else {
+                cartera.style.display = 'inline';
+
+
+                if (URLactual != "/contact" && URLactual != "/contact/" && URLactual != "/account/login" && URLactual != "/account/login/" && URLactual != "/articulo" && URLactual != "/articulo/") {
+                    $(document).ready(function () {
+                        var window_height = $(window).height();
+                        var page_height = $('header').height() + $('#content').height();
+                        var footer_height = $('footer').height();
+
+                        if (page_height < window_height) {
+
+                            margin_footer = window_height - page_height - footer_height - 1;
+                            $('footer').css('margin-top', margin_footer);
+                        }
+                    });
+
+                }
+                //aqui hago que el menu se muestre hacia abajo en todas los links menos en los señalados
+
+
+            }
+        }
+
+        window.onresize = reportWindowSize;
+
+        reportWindowSize();
+
+
+        if (URLactual == "/contact" || URLactual == "/contact/") {
+            var intro = document.getElementById('op1');
+            intro.style.backgroundColor = '#839abd';
+            intro.style.borderTop = 'thick solid #ffffff';
+        }
+
+
+        if (location.pathname == "/Myaccount" || location.pathname == "/Myaccount/") {
+            var asd = document.getElementById('op3');
+            asd.style.backgroundColor = '#839abd';
+            asd.style.borderTop = 'thick solid #ffffff';
+        }
+
+
+        if (URLactual == "/account/login" || URLactual == "/account/login/" || URLactual == "/Myaccount") {
+            var intro = document.getElementById('op3');
+            intro.style.backgroundColor = '#839abd';
+            intro.style.borderTop = 'thick solid #ffffff';
+        }
+
+        if (URLactual == "/cart" || URLactual == "/cart/") {
+            var intro = document.getElementById('op6');
+            intro.style.backgroundColor = '#839abd';
+            intro.style.borderTop = 'thick solid #ffffff';
+        }
+
+
+        if (URLactual == "/" || URLactual == "/index") {
+            var intro = document.getElementById('op0');
+            intro.style.backgroundColor = '#839abd';
+            intro.style.borderTop = 'thick solid #ffffff';
+        }
+
+
+
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#slide_nav_button").click(function () {
+                event.stopImmediatePropagation(); //Detengo la inmediata propagación del evento
+
+                $('#slide_menu').animate({ width: 'toggle' }, 1);
+                simboloMenu = document.getElementById("slide_nav_button");
+                if (simboloMenu.innerHTML == '☰') {
+                    $('#slide_nav_button').text('X');
+
+                } else {
+                    $('#slide_nav_button').text('☰');
+
+
+                }
+            });
+
+
+
+      
+
+        });
+
+
+
+
+        
+
+
+
+
+
+    </script>
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/web.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/6c898eea5a.js" crossorigin="anonymous"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>
+
+

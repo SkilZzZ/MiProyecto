@@ -1,0 +1,240 @@
+﻿@model List<Intaria.Models.Pedidos>
+@{
+    var ultimas24 = ViewBag.ultimas24;
+    var ultimasemana = ViewBag.ultimasemana;
+    var ultimomes = ViewBag.ultimomes;
+    var ultimoano = ViewBag.ultimoano;
+
+    List<Intaria.Models.Fotos> listaFotos = ViewBag.listaFotos;
+
+}
+<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+
+<html>
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="table-responsive">
+
+
+        <div id="otro">
+            <select id="ejemplo" name="status">
+                <option value="autonomo">ultimas 24 horas</option>
+                <option value="paro">ultimos 7 dias</option>
+                <option value="trabajador">ultimo mes</option>
+                <option value="ultimoanioo">ultimo año</option>
+            </select>
+
+            <div id="canvas">
+            </div>
+        </div>
+
+        <script>
+
+
+
+$(document).ready(function(){
+
+
+$('#ejemplo').on('change', function() {
+
+
+
+
+    var e = $('select[name=status]').val();
+
+
+            if (e.length == 8) {
+
+                $("#canvas").empty();
+
+                $("#canvas").prepend("<canvas id='last24hours' style='width:100%' height='400'></canvas>");
+
+			$(function () {
+            var myChart = new Chart(document.getElementById('last24hours'), {
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+                    datasets: [{
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.2,
+                        label: 'Ventas Ultimas 24 horas: @ultimas24 €',
+                        data: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0,1, 2, 3, 0, 0, 0, 0, 0, 0, 0,1, 2, 3, 0 ],
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+			            });
+            }
+
+			if (e.length==4){
+                $("#canvas").empty();
+
+                $("#canvas").prepend("<canvas id='las7days' style='width:100%' height='400'></canvas>");
+
+			        $(function () {
+			            var myChart = new Chart(document.getElementById('las7days'), {
+                type: 'line',
+                data: {
+                    labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+                    datasets: [{
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.2,
+                        label: 'Ventas Ultimos 7 Dias: @ultimasemana €',
+                        data: [1, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+        });
+    }
+
+            if (e.length == 10) {
+
+                $("#canvas").empty();
+
+                $("#canvas").prepend("<canvas id='lastmonth' style='width:100%' height='400'></canvas>");
+
+			$(function () {
+                var myChart = new Chart(document.getElementById('lastmonth'), {
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+                    datasets: [{
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.2,
+                        label: 'Ventas Ultimo mes: @ultimomes €',
+                        data: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0,1, 2, 3, 0, 0, 0, 0, 0, 0, 0,1, 2, 3, 0, 0, 0,1, 2, 3, 0 ],
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+			            });
+             }
+
+			if (e.length==11){
+                $("#canvas").empty();
+
+                $("#canvas").prepend("<canvas id='last12months' style='width:100%' height='400'></canvas>");
+
+			$(function () {
+            var myChart = new Chart(document.getElementById('last12months'), {
+                type: 'line',
+                data: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    datasets: [{
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.2,
+                        label: 'Ventas Ultimo año: @ultimoano €',
+                        p: 'asd',
+                        data: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+			            });
+                }
+
+
+
+
+});
+
+
+			$("#canvas").prepend("<canvas id='last24hours' style='width:100%' height='400'></canvas>");
+
+			$(function () {
+            var myChart = new Chart(document.getElementById('last24hours'), {
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],
+                    datasets: [{
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension: 0.2,
+                        label: 'Ventas Ultimas 24 horas: @ultimas24 €',
+                        p: 'asd',
+                        data: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0,1, 2, 3, 0, 0, 0, 0, 0, 0, 0,1, 2, 3, 0 ],
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+			            });
+
+
+
+});
+
+
+
+
+        </script>
+
+
+
+        </div>
+
+</body>
+</html>
+
+
+
+
+

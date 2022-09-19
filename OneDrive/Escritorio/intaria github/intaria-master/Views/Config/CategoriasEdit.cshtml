@@ -1,0 +1,79 @@
+﻿@model Intaria.Models.Categoria
+@{ var listaCategoria = ViewBag.listaCategoria;
+    var cont = 0;
+    List<Intaria.Models.Categoria> subcategorias = ViewBag.subcategorias; }
+
+
+
+@foreach (Intaria.Models.Categoria cate in listaCategoria)
+{
+    if (cate.CategoriaPadre == Model.Id)
+    {
+        cont = cont + 1;
+    }
+}
+
+<div class="div-cat-art-ped table-responsive">
+    <h3>@(Model.Id == Guid.Empty ? "Nueva" : "Editar") Categoria</h3>
+    @if ( cont > 0)
+    {
+<button type="button" class="btn-info botonsubcat" data-toggle="collapse" data-target="#demo">Subcategorias</button>}
+
+    <form method="POST" name="pri" id="pri">
+        <input type="hidden" value="@Model.Id" name="Id" />
+
+        <div class="form-group select-items">
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" aria-describedby="nombreHelp" placeholder="Nombre" value="@Model.Nombre" data-val-required="Este campo no puede estar en blanco." data-val="true">
+            <small data-valmsg-for="nombre" data-valmsg-replace="true" id="nombreHelp" class="form-text text-muted"></small>
+        </div>
+
+        <div class="form-group  select-items ">
+            <label for="descripcion">Descripcion</label>
+            <textarea cols="40" rows="5" style="resize: both" ; type="text" class="form-control cat-textarea" id="descripcion" name="descripcion" aria-describedby="descirpcionHelp" placeholder="Descripcion" data-val-required="Este campo no puede estar en blanco." data-val="true">@Model.Descripcion</textarea>
+            <small data-valmsg-for="descripcion" data-valmsg-replace="true" id="descripcionHelp" class="form-text text-muted"></small>
+        </div>
+        <div class="form-group  select-items">
+            <label for="descripcion">Categoria Padre</label>
+            <select type="text" class="form-control" id="categoriaPadre" name="categoriaPadre" aria-describedby="categoriaPadreHelp" placeholder="Categoria Padre">
+                <option value="">- Ninguna -</option>
+                @foreach (Intaria.Models.Categoria cat in listaCategoria)
+                {
+                    if (cat.Id == Model.CategoriaPadre)
+                    {
+    <option value="@cat.Id" selected>@cat.Nombre</option>
+ }
+else
+{
+<option value="@cat.Id">@cat.Nombre</option>
+}
+}
+            </select>
+
+        </div>
+
+
+        <div class="subcat ">
+            <span style="" id="demo" class="collapse">
+
+                @foreach (Intaria.Models.Categoria cate in listaCategoria)
+                {
+                    if (cate.CategoriaPadre == Model.Id)
+                    {
+    <p>@cate.Nombre</p>}
+                }
+            </span>
+        </div><br />
+
+
+        <a href="/Config/Categorias" class="btn btn-secondary">Volver</a>
+        <button type="submit" class="btn btn-primary">@(Model.Id == Guid.Empty ? "Guardar" : "Actualizar")</button>
+
+    </form>
+
+
+</div>
+
+
+
+

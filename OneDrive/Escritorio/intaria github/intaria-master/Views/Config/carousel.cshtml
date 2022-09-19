@@ -1,0 +1,45 @@
+﻿@model List<Intaria.Models.Carousel>
+
+
+<div class="container-fluid flex-shrink-0">
+    <div class="row justify-content-between  my-2">
+        <h2>Lista de imagenes carousel</h2>
+
+
+
+        <div class="btnagregar d-flex align-items-start d-inline-flex">
+            <a href="/Config/CarouselEdit" type="button" class="btn btn-success"><i class="far fa-images"></i> Agregar imagen </a>
+        </div>
+
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th  class="imgcarousel">Imagen</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model)
+            {
+        <tr style="background:#dcddd2">
+            <td  id="campo1" ><a href="/config/CarouselEdit/@cat.Id">@cat.Titulo</a></td>
+            <td class="imgcarousel"><img src="~/imagenes-carousel/@cat.Imagen" /></td>
+            <td><p class="td-descripcion">@cat.Descripcion </p></td>
+            <td>
+                <form method="POST" class="borrar" action="/Config/carousel" data-tipo="el carousel">
+                    <input type="hidden" name="Id" value="@cat.Id" />
+                    <button type="submit" class="btn btn-danger" title="Borrar"><i class="far fa-trash-alt"></i></button>
+                </form>
+            </td>
+        </tr>
+            }
+        </tbody>
+
+
+    </table>
+</div>

@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <UserSecretsId>5ebe032c-5bbf-4c62-9090-0286533e59da</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="NewFolder1\**" />
+    <Compile Remove="Views\NewFolder1\**" />
+    <Compile Remove="Views\NewFolder\**" />
+    <Compile Remove="Views\Web\Informacion\**" />
+    <Compile Remove="wwwroot\fotos\5fb12a9d-9768-417b-adac-58da0753ca0d\**" />
+    <Compile Remove="wwwroot\fotos\81e85d78-a8a0-462f-b7e3-b82529ea47a4\**" />
+    <Compile Remove="wwwroot\fotos\8d0bf327-ce14-40f9-bdb9-0890df0d5ff1\**" />
+    <Compile Remove="wwwroot\fotos\8dff566e-0a2d-462f-bf69-b04386fbaa3e\**" />
+    <Compile Remove="wwwroot\fotos\9c68be10-c663-4815-8cf8-6c64053b5d65\**" />
+    <Compile Remove="wwwroot\fotos\a1f1912a-9f9c-41a6-bebe-3fa218e55ca0\**" />
+    <Compile Remove="wwwroot\fotos\c5cb9462-e75b-4865-b683-33c13bc18108\**" />
+    <Compile Remove="wwwroot\fotos\d1cff212-720d-4127-a816-77ce688f7e12\**" />
+    <Compile Remove="wwwroot\fotos\da8727a5-7914-4c12-a1e3-944645ea5581\**" />
+    <Compile Remove="wwwroot\fotos\df4d6179-edc5-45c5-8beb-d8814fbea6d3\**" />
+    <Compile Remove="wwwroot\fotos\dfb6610f-87d9-4e07-a22d-3d038e1ec545\**" />
+    <Compile Remove="wwwroot\fotos\e3879946-cc61-4482-b478-04f12a02c064\**" />
+    <Compile Remove="wwwroot\fotos\e73cc879-4045-4573-b06b-781a0f5e6d02\**" />
+    <Compile Remove="wwwroot\fotos\fa5e1214-ffdd-4fe6-893c-4494fb297369\**" />
+    <Compile Remove="wwwroot\tel\**" />
+    <Content Remove="NewFolder1\**" />
+    <Content Remove="Views\NewFolder1\**" />
+    <Content Remove="Views\NewFolder\**" />
+    <Content Remove="Views\Web\Informacion\**" />
+    <Content Remove="wwwroot\fotos\5fb12a9d-9768-417b-adac-58da0753ca0d\**" />
+    <Content Remove="wwwroot\fotos\81e85d78-a8a0-462f-b7e3-b82529ea47a4\**" />
+    <Content Remove="wwwroot\fotos\8d0bf327-ce14-40f9-bdb9-0890df0d5ff1\**" />
+    <Content Remove="wwwroot\fotos\8dff566e-0a2d-462f-bf69-b04386fbaa3e\**" />
+    <Content Remove="wwwroot\fotos\9c68be10-c663-4815-8cf8-6c64053b5d65\**" />
+    <Content Remove="wwwroot\fotos\a1f1912a-9f9c-41a6-bebe-3fa218e55ca0\**" />
+    <Content Remove="wwwroot\fotos\c5cb9462-e75b-4865-b683-33c13bc18108\**" />
+    <Content Remove="wwwroot\fotos\d1cff212-720d-4127-a816-77ce688f7e12\**" />
+    <Content Remove="wwwroot\fotos\da8727a5-7914-4c12-a1e3-944645ea5581\**" />
+    <Content Remove="wwwroot\fotos\df4d6179-edc5-45c5-8beb-d8814fbea6d3\**" />
+    <Content Remove="wwwroot\fotos\dfb6610f-87d9-4e07-a22d-3d038e1ec545\**" />
+    <Content Remove="wwwroot\fotos\e3879946-cc61-4482-b478-04f12a02c064\**" />
+    <Content Remove="wwwroot\fotos\e73cc879-4045-4573-b06b-781a0f5e6d02\**" />
+    <Content Remove="wwwroot\fotos\fa5e1214-ffdd-4fe6-893c-4494fb297369\**" />
+    <Content Remove="wwwroot\tel\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="Views\NewFolder1\**" />
+    <EmbeddedResource Remove="Views\NewFolder\**" />
+    <EmbeddedResource Remove="Views\Web\Informacion\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\5fb12a9d-9768-417b-adac-58da0753ca0d\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\81e85d78-a8a0-462f-b7e3-b82529ea47a4\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\8d0bf327-ce14-40f9-bdb9-0890df0d5ff1\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\8dff566e-0a2d-462f-bf69-b04386fbaa3e\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\9c68be10-c663-4815-8cf8-6c64053b5d65\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\a1f1912a-9f9c-41a6-bebe-3fa218e55ca0\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\c5cb9462-e75b-4865-b683-33c13bc18108\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\d1cff212-720d-4127-a816-77ce688f7e12\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\da8727a5-7914-4c12-a1e3-944645ea5581\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\df4d6179-edc5-45c5-8beb-d8814fbea6d3\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\dfb6610f-87d9-4e07-a22d-3d038e1ec545\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\e3879946-cc61-4482-b478-04f12a02c064\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\e73cc879-4045-4573-b06b-781a0f5e6d02\**" />
+    <EmbeddedResource Remove="wwwroot\fotos\fa5e1214-ffdd-4fe6-893c-4494fb297369\**" />
+    <EmbeddedResource Remove="wwwroot\tel\**" />
+    <None Remove="NewFolder1\**" />
+    <None Remove="Views\NewFolder1\**" />
+    <None Remove="Views\NewFolder\**" />
+    <None Remove="Views\Web\Informacion\**" />
+    <None Remove="wwwroot\fotos\5fb12a9d-9768-417b-adac-58da0753ca0d\**" />
+    <None Remove="wwwroot\fotos\81e85d78-a8a0-462f-b7e3-b82529ea47a4\**" />
+    <None Remove="wwwroot\fotos\8d0bf327-ce14-40f9-bdb9-0890df0d5ff1\**" />
+    <None Remove="wwwroot\fotos\8dff566e-0a2d-462f-bf69-b04386fbaa3e\**" />
+    <None Remove="wwwroot\fotos\9c68be10-c663-4815-8cf8-6c64053b5d65\**" />
+    <None Remove="wwwroot\fotos\a1f1912a-9f9c-41a6-bebe-3fa218e55ca0\**" />
+    <None Remove="wwwroot\fotos\c5cb9462-e75b-4865-b683-33c13bc18108\**" />
+    <None Remove="wwwroot\fotos\d1cff212-720d-4127-a816-77ce688f7e12\**" />
+    <None Remove="wwwroot\fotos\da8727a5-7914-4c12-a1e3-944645ea5581\**" />
+    <None Remove="wwwroot\fotos\df4d6179-edc5-45c5-8beb-d8814fbea6d3\**" />
+    <None Remove="wwwroot\fotos\dfb6610f-87d9-4e07-a22d-3d038e1ec545\**" />
+    <None Remove="wwwroot\fotos\e3879946-cc61-4482-b478-04f12a02c064\**" />
+    <None Remove="wwwroot\fotos\e73cc879-4045-4573-b06b-781a0f5e6d02\**" />
+    <None Remove="wwwroot\fotos\fa5e1214-ffdd-4fe6-893c-4494fb297369\**" />
+    <None Remove="wwwroot\tel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\VueController.cs" />
+    <Compile Remove="Controllers\WebGrid.cs" />
+    <Compile Remove="Models\AppLogin.cs" />
+    <Compile Remove="Models\AppUser.cs" />
+    <Compile Remove="Models\Class.cs" />
+    <Compile Remove="Views\Config\Clientes.cshtml.cs" />
+    <Compile Remove="Views\Config\Index1.cshtml.cs" />
+    <Compile Remove="Views\Config\Index2.cshtml.cs" />
+    <Compile Remove="Views\Config\PedidosEdit.cshtml.cs" />
+    <Compile Remove="Views\Web\maps.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+    <Content Remove="Views\Config\usuarios.razor" />
+    <Content Remove="wwwroot\css\haber.scss" />
+    <Content Remove="wwwroot\fotos\5b68085085600a5ed35832a6 - copia %282%29 - copia.jpg" />
+    <Content Remove="wwwroot\img\Bankia_logo.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Config\photo1.jpg" />
+    <None Remove="Views\Shared\.editorconfig" />
+    <None Remove="Views\Shared\site.css" />
+    <None Remove="Views\Shared\StyleSheet.css" />
+    <None Remove="Views\Shared\StyleSheet.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DNTCaptcha.Core" Version="3.3.0" />
+    <PackageReference Include="IdentityServer3" Version="2.6.3" />
+    <PackageReference Include="Microsoft.AspNet.Providers.Core" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.0-rc.2.20475.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.0-rc.2.20475.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.0-rc.2.20475.17" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.12.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0-rc.2.20516.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.2.0-beta" />
+    <PackageReference Include="Stripe.net" Version="39.39.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Database\Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\imagenes-contacto\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Config\ArticulosEdit.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\Config\carousel.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\Config\CarouselEdit.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+</Project>

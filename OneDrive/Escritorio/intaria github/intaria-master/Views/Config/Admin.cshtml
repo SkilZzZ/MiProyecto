@@ -1,0 +1,525 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zxx">
+<!-- Head -->
+
+<head>
+    <style>
+
+
+        ol,
+        ul {
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        blockquote,
+        q {
+            quotes: none;
+        }
+
+            blockquote:before,
+            blockquote:after,
+            q:before,
+            q:after {
+                content: '';
+                content: none;
+            }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        /*--start editing from here--*/
+
+        a {
+            text-decoration: none;
+        }
+
+        .txt-rt {
+            text-align: right;
+        }
+
+        /* text align right */
+
+        .txt-lt {
+            text-align: left;
+        }
+
+        /* text align left */
+
+        .txt-center {
+            text-align: center;
+        }
+
+        /* text align center */
+
+        .float-rt {
+            float: right;
+        }
+
+        /* float right */
+
+        .float-lt {
+            float: left;
+        }
+
+        /* float left */
+
+        .clearfix {
+            clear: both;
+        }
+
+        /* clear float */
+
+        .pos-relative {
+            position: relative;
+        }
+
+        /* Position Relative */
+
+        .pos-absolute {
+            position: absolute;
+        }
+
+        /* Position Absolute */
+
+        .vertical-base {
+            vertical-align: baseline;
+        }
+
+        /* vertical align baseline */
+
+        .vertical-top {
+            vertical-align: top;
+        }
+
+        /* vertical align top */
+
+        nav.vertical ul li {
+            display: block;
+        }
+
+        /* vertical menu */
+
+        nav.horizontal ul li {
+            display: inline-block;
+        }
+
+        /* horizontal menu */
+
+        img {
+            max-width: 100%;
+        }
+
+        /*--end reset--*/
+        body a:hover {
+            text-decoration: none;
+        }
+
+        .clearfix {
+            clear: both;
+        }
+
+        /* content */
+
+        /*
+          Responsive form elements
+          Flexbox layout
+        */
+
+        /*/////////////// GLOBAL STYLES ////////////////////*/
+
+        body {
+            background: url(../) no-repeat center !important;
+            background-image: url(https://okdiario.com/img/2017/09/05/estrategias-de-guerra-e1504597053224.jpg) !important;
+            background-size: cover !important;
+            -webkit-background-size: cover !important;
+            -moz-background-size: cover !important;
+            -o-background-size: cover !important;
+            -ms-background-size: cover !important;
+            background-attachment: fixed !important;
+            font-family: 'Mukta Mahee', sans-serif !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /*/////////////// FONT STYLES ////////////////////*/
+
+        .content-w3ls {
+            max-width: 480px;
+            margin: 5em auto;
+        }
+
+        .content-bottom {
+            padding: 3.5em 3em 1em;
+            background: rgba(0, 0, 0, 0.24);
+            border-radius: 1px 1px 1px 0px;
+            border-left: 5px solid #742ecc;
+            margin: 0 1em;
+        }
+
+        .content-top-agile {
+            background: rgba(2, 2, 2, 0.65);
+            padding: 3em;
+            color: #fff;
+            border-radius: 25px 25px 0 0;
+            text-transform: uppercase;
+        }
+
+        h1.title-agile {
+            padding: 0.5em 0 0;
+            text-transform: uppercase;
+            color: #fff;
+            font-size: 3.3em;
+            text-shadow: 3px 3px 1px #000;
+            letter-spacing: 5px;
+            word-spacing: 6px;
+        }
+
+        .content-w3ls ul li {
+            display: inline-block;
+        }
+
+        li.switch-agileits {
+            float: left;
+        }
+
+        ul.list-login li:nth-child(2) {
+            float: right;
+        }
+
+        .field-group label {
+            font-size: 15px;
+        }
+
+        .check {
+            margin: 1em 0 1.5em;
+        }
+
+        .checkbox input,
+        .radio input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .checkbox i {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            display: block;
+            width: 15px;
+            height: 15px;
+            outline: none;
+            border: none;
+            background: #fff;
+        }
+
+        .check label {
+            margin: 0;
+            font-size: 1em;
+            text-transform: capitalize;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .checkbox {
+            position: relative;
+            padding-left: 38px !important;
+            cursor: pointer;
+        }
+
+            .checkbox input:checked + i:after,
+            .radio input:checked + i:after {
+                opacity: 1;
+            }
+
+            .checkbox input + i:after {
+                content: '';
+                background: url(../images/check.png) no-repeat 1px;
+                top: 0px;
+                left: 0px;
+                width: 14px;
+                height: 14px;
+                font: normal 8px/16px FontAwesome;
+                text-align: center;
+            }
+
+            .checkbox input + i:after,
+            .radio input + i:after {
+                position: absolute;
+                opacity: 0;
+                transition: opacity 0.1s;
+                -o-transition: opacity 0.1s;
+                -ms-transition: opacity 0.1s;
+                -moz-transition: opacity 0.1s;
+                -webkit-transition: opacity 0.1s;
+            }
+
+        /*/////////////// FORM STYLES ////////////////////*/
+
+        form .field-group {
+            background: transparent;
+            display: flex;
+            display: flex;
+            display: -webkit-box;
+            /* OLD - iOS 6-, Safari 3.1-6 */
+            display: -moz-box;
+            /* OLD - Firefox 19- (buggy but mostly works) */
+            display: -ms-flexbox;
+            /* TWEENER - IE 10 */
+            display: -webkit-flex;
+            /* NEW - Chrome */
+            margin: 0 0 12px 0;
+        }
+
+            form .field-group span {
+                flex: 1;
+                -webkit-box-flex: 1; /* OLD - iOS 6-, Safari 3.1-6 */
+                -moz-box-flex: 1; /* OLD - Firefox 19- */
+                width: 20%; /* For old syntax, otherwise collapses. */
+                -webkit-flex: 1; /* Chrome */
+                -ms-flex: 1; /* IE 10 */
+                color: #742ecc;
+                font-size: 1.5em;
+                background: #fff;
+                text-align: center;
+                margin: 0 8px 0 0;
+                line-height: 54px;
+                border: solid #ffffff;
+                border-width: 1px 0px 1px 1px;
+            }
+
+        ul.list-login {
+            margin: 2em 0;
+        }
+
+        form .field-group .wthree-field {
+            flex: 3 50%;
+            -webkit-box-flex: 3 50%; /* OLD - iOS 6-, Safari 3.1-6 */
+            -moz-box-flex: 3 50%; /* OLD - Firefox 19- */
+            -webkit-flex: 3 50%; /* Chrome */
+            -ms-flex: 3 50%; /* IE 10 */
+        }
+
+        .wthree-field input[type="submit"] {
+            background: #742ecc;
+            border: none;
+            color: #fff;
+            padding: 12px 15px;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Mukta Mahee', sans-serif;
+            cursor: pointer;
+            transition: 0.5s all;
+            -webkit-transition: 0.5s all;
+            -moz-transition: 0.5s all;
+            -o-transition: 0.5s all;
+            -ms-transition: 0.5s all;
+        }
+
+            .wthree-field input[type="submit"]:hover {
+                background: #000;
+                color: #fff;
+            }
+
+        .wthree-field input {
+            padding: 15px 15px;
+            font-size: 16px;
+            border-bottom: 1px solid #fff;
+            border-width: 1px 1px 1px 0;
+            background: #fff;
+            box-sizing: border-box;
+            border-radius: 0 30px 30px 0;
+            width: 100%;
+            font-family: 'Mukta Mahee', sans-serif;
+            outline: none;
+        }
+
+        /* switch */
+
+        label.switch {
+            position: relative;
+            display: inline-block;
+            height: 23px;
+            padding-left: 4em;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        li:nth-child(2) a,
+        label.switch {
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        li:nth-child(2) a {
+            color: #fff;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 26%;
+            background-color: #adadad;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 15px;
+                width: 15px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #742ecc;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+
+        /* //switch */
+        .copyright p {
+            color: #fff;
+            letter-spacing: 1.5px;
+            font-size: 16px;
+            word-spacing: 2px;
+            padding: 0 2em 2em;
+        }
+
+            .copyright p a {
+                color: #fff;
+            }
+
+
+
+        /* -- //Responsive code -- */
+    </style>
+    <title>Prime login Form Flat Responsive Widget Template :: w3layouts</title>
+    <!-- Meta-Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Prime login Form a Responsive Web Template, Bootstrap Web Templates, Flat Web Templates, Android Compatible Web Template, Smartphone Compatible Web Template, Free Webdesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design">
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <!-- //Meta-Tags -->
+    <!-- Index-Page-CSS -->
+    <link rel="stylesheet" href="~/css/site.css" type="text/css" media="all">
+    <!-- //Custom-Stylesheet-Links -->
+    <!--fonts -->
+    <link href="//fonts.googleapis.com/css?family=Mukta+Mahee:200,300,400,500,600,700,800" rel="stylesheet">
+    <!-- //fonts -->
+    <!-- //Font-Awesome-File-Links -->
+    <script src="https://kit.fontawesome.com/6c898eea5a.js" crossorigin="anonymous"></script>
+
+</head>
+<!-- //Head -->
+<!-- Body -->
+
+<body>
+    <h1 class="title-agile text-center">WELCOME ADMIN INTARIA MILITARIA</h1>
+    <div class="content-w3ls">
+        <div class="content-bottom">
+            <form action="#" method="post">
+                <div class="field-group">
+                    <span class="fa fa-user" aria-hidden="true"></span>
+                    <div class="wthree-field">
+                        <input name="text1" id="text1" type="text" value="" placeholder="username or email" required>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <span class="fa fa-lock" aria-hidden="true"></span>
+                    <div class="wthree-field">
+                        <input name="password" id="myInput" type="Password" placeholder="password">
+                    </div>
+                </div>
+                <div class="field-group">
+                    <div class="check">
+                        <label class="w3l">
+                            <input type="checkbox" onclick="myFunction()">
+                            <i> </i>show password
+                        </label>
+                    </div>
+                    <!-- script for show password -->
+                    <script>
+                        function myFunction() {
+                            var x = document.getElementById("myInput");
+                            if (x.type === "password") {
+                                x.type = "text";
+                            } else {
+                                x.type = "password";
+                            }
+                        }
+                    </script>
+                    <!-- //script for show password -->
+                </div>
+                <div class="wthree-field">
+                    <input id="saveForm" name="saveForm" type="submit" value="sign in" />
+                </div>
+                <ul class="list-login">
+                    <li class="switch-agileits">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                            keep me signed in &nbsp;
+                        </label>
+                    </li>
+                    <li>
+
+                        <a href="#" class="text-warning" style="color:yellow">Forgot password?</a>
+                    </li>
+                    <li class="clearfix"></li>
+                </ul>
+            </form>
+        </div>
+    </div>
+
+</body>
+<!-- //Body -->
+</html>

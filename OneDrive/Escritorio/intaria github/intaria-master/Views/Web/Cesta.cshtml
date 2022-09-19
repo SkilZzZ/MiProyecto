@@ -1,0 +1,208 @@
+﻿@model List<Intaria.Models.Articulo>
+
+
+@{ List<Intaria.Models.Articulo> articulos = ViewBag.articulos;
+    var ultimoano = ViewBag.ultimoano;
+    List<Intaria.Models.Categoria> listaCategoria = ViewBag.listaCategoria;
+
+    List<Intaria.Models.Fotos> listaFotos = ViewBag.listaFotos;
+    var cont = 0;
+    var total = 0;
+    var letracont = "p";
+    var cantidadcont = "c";
+    var filacont = "f";
+
+
+    var signos = "signos";
+}
+
+
+@if (Model.Count > 0)
+{
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <form class="form-horizontal" method="POST" name="pri" id="pri" enctype="multipart/form-data">
+
+        <div class="container">
+            <h3 id="listaArticulos">  there are @Model.Count items in the list</h3>
+            <div class="row">
+                <div class="col-sm-12 col-md-10 col-md-offset-1">
+                    <div class="table-responsive">
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center">Total</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                   
+                                @foreach (Intaria.Models.Articulo a in Model)
+                                {
+                                    filacont = filacont + 1;
+                                    cont = cont + 1;
+                                    total = total + a.Precio;
+                                    letracont = letracont + cont;
+                                    cantidadcont = cantidadcont + cont;
+                                    signos = signos + cont;
+                                    <tr id="@filacont">
+                                        <td class="col-sm-8 col-md-6">
+                                            <div class="media">
+                                                <a class="thumbnail pull-left" href="#"> <img src="~/fotos/@a.Id/@a.NombreArchivo" style="width: 90px; height: 90px;"> </a>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading nombre-art"><a href="#">@a.Nombre</a></h4>
+                                                    <span>
+                                                        @foreach (Intaria.Models.Categoria cat in listaCategoria)
+                                                        {
+                                                            if (cat.Id == a.IdCategoria)
+                                                            {
+                                                                <p>Category: @cat.Nombre</p>}
+
+                                                        }
+                                                    </span><span class="text-success"><strong></strong></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td data-titulo="quantity" class="col-sm-1 col-md-1" style="text-align: center">
+                                            <input type='number' style="width:50px" readonly id="@cantidadcont" value="1">
+
+                                            <input type="button" value="+" class="@signos"></input>
+                                            <input type="button" value="-" class="@signos"></input>
+
+                                              
+
+                                        </td>
+                                        <td data-titulo="price" class="col-sm-1 col-md-1 text-center"><strong>@a.Precio.ToString("#.00") €</strong></td>
+                                        <td data-titulo="total-price" class="col-sm-1 col-md-1 text-center"><strong><p id="@letracont"><strong>@a.Precio.ToString("#.00") €</p></strong></td>
+                                        <td class="col-sm-1 col-md-1">
+                                            <button type="button" class="btn btn-danger" id="@filacont"  data-id="@a.Id">
+                                                <span class="glyphicon glyphicon-remove"></span> Remove
+
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <script>
+
+                                        var value=''
+
+                                        var total=@total;
+
+                                        var totalunidades = 0;
+                                        var acum = 0;
+                                        var acumremove = 0;
+                                        var iNum = 0;
+                                        var listaArticulos=@Model.Count;
+
+                                        $(document).ready(function () {
+
+                                            $("button#@filacont").click(function () {
+
+
+                                                var t = $(this);
+
+
+                                                $.post("/web/AnadirAlCarrito", { Id: t.data("id"), Remove: "si" }, function (r) {
+
+                                                });
+
+
+
+                                                listaArticulos = listaArticulos - 1;
+
+                                                $('#listaArticulos').html('there are ' + listaArticulos + " items in the list");
+
+
+                                                listaArticulos = listaArticulos - 1;
+
+                                                $('#listaArticulos').html('there are '+ listaArticulos + " items in the list");
+
+
+
+                                                var texto = $("p#@letracont").text();
+                                                 iNum = parseInt(texto);
+                                                acum = acum - iNum;
+
+                                                $("#@filacont").remove();
+
+
+                                                $('#totalcart').html(total + acum + ',00 €');
+
+
+                                            });
+
+                                  $(".@signos").click(function () {
+
+
+                                      totalunidades = $("#@cantidadcont").val();
+                                      value = $(this).val();
+
+
+                                      if (value == '+' && @a.Cantidad > totalunidades) {
+                                          totalunidades = totalunidades - (-1);
+                                          acum = acum +@a.Precio;
+                                      } else if (value == '-' && totalunidades > 1) {
+                                          totalunidades = totalunidades - 1;
+                                          acum = acum -@a.Precio;
+                                      } else if (value == '-' && totalunidades == 1) {
+                                          alert("you cannot select a null quantity")
+                                      } else {
+                                          alert("No more items in inventory")
+                                      }
+
+
+                                          $("#@cantidadcont").val(totalunidades)
+
+                                          $('#@letracont').html($('#@cantidadcont').val() *@a.Precio+',00 €');
+
+
+                                      $('#totalcart').html(acum + total + ',00 €');
+
+
+
+                                  });
+                                        });
+
+                                    </script>
+                                }
+
+
+                                <tr>
+                                    <td>   </td>
+                                    <td>   </td>
+                                    <td> <h3 class="text-right">Total:</h3>  </td>
+                                    <td colspan="2" class="text-right"><h3><strong name="total" id="totalcart">@total.ToString("#.00") €</strong></h3></td>
+                                </tr>
+                                <tr>
+                                    <td>   </td>
+                                    <td colspan="3">
+                                        <a href="/" class="btn btn-secondary">Continue shopping</a>
+                                    </td>
+                                    <td colspan="2">
+                                        <a href="/payment" class="btn btn-success">
+                                            proceed to checkout
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </form>
+}
+else
+{
+    <h1>No article has been added</h1>}
+
+

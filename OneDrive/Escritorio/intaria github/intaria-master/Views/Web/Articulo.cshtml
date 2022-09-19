@@ -1,0 +1,160 @@
+﻿@model Intaria.Models.Articulo
+@{
+    List<Intaria.Models.Fotos> listaFotos = ViewBag.listaFotos;
+
+    var listaCategoria = ViewBag.listaCategoria;
+}
+
+
+
+
+
+<div class="row align-items-start">
+
+    <div class="col-sm-5 col-md-5" id="main-content">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+
+            <div class="carousel-inner" style="background:black">
+
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    @for (var x = 1; x < listaFotos.Count; x++)
+                    {
+                        <li data-target="#carouselExampleIndicators" data-slide-to="@x"></li>
+                    }
+                </ol>
+
+                @for (var i = 0; i < listaFotos.Count; i++)
+                {
+                    var foto = listaFotos[i];
+                    <div class="carousel-item @(i==0 ? "active" : "")">
+                        <img src="/fotos/@Model.Id/@foto.NombreArchivo" id="imgarticulo" title="@foto.NombreArchivo" />
+
+                    </div>
+                }
+            </div>
+
+            <div style="margin-bottom:20px;">
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-6">
+        <h3 class="nombre-articulo">
+            @Model.Nombre
+        </h3>
+        <h1>
+            @Model.Precio.ToString("#.00") €
+        </h1><p> &nbsp; + Gastos de envío</p>
+
+        <div>
+            Cantidad
+            <button class="btn btn-outline-primary" type="button" id="menos" onclick="javascript: contadormenos()">-</button>
+            <input class="btn btn-outline-dark" id="cantidad" type="text" value="1">
+            <button class="btn btn-outline-primary" type="button" id="mas" onclick="javascript: contadormas()">+</button>
+        </div>
+
+        <div>
+            <div class="form-group select-items">
+                @foreach (Intaria.Models.Categoria cat in listaCategoria)
+                {
+                    if (cat.Id == Model.IdCategoria)
+                    {
+                        <p>
+                            Categoria:  @cat.Nombre
+                        </p>
+                    }
+
+
+                }
+            </div>
+        </div>
+
+        <p>Descripción</p>
+        <i class="desc-articulo">@Model.Descripcion</i>
+
+
+
+
+        <div class="row align-items-start justify-content-center">
+
+            <span title="Lista de deseos" class="iconify cellartic" data-icon="ant-design:heart-filled" data-inline="false" style="color: grey;border:solid grey 1px;width:30px;height:40px"> </span>
+            <div title="Add to cart" class="row align-items-start " id="bnAnadir" data-id="@Model.Id">
+                <div class="button iconify cellartic" style="border:solid grey 1px">
+                    <span class="iconify" data-icon="icons8:buy" data-inline="false" style="width:30px;height:30px"></span>add to cart
+                </div>
+
+                <a href="/cart" class="btn btn-success cellartic"  data-icon="icons8:buy">Buy</a>
+
+
+            </div>
+        </div>
+
+
+        <div class="row align-items-start justify-content-center">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://espai.es"><span class="iconify" data-icon="logos:facebook" data-inline="false" data-width="30" data-height="30"></span></a>
+            <a href="https://twitter.com/intent/tweet?text= escola%20inform%C3%A1tica%20i%20disseny&url=https://espai.es&hashtags=dissenyweb"><span class="iconify" data-icon="logos:twitter" data-inline="false" data-width="30" data-height="30"></span></a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://espai.es"><span class="iconify" data-icon="ant-design:linkedin-filled" data-inline="false" data-width="30" data-height="30"></span></a>
+            <a href="https://api.whatsapp.com/send?text=escola%20inform%C3%A1tica%20i%20disseny%20https://espai.es"><span class="iconify" data-icon="logos:whatsapp" data-inline="false" data-width="30" data-height="30"></span></a>
+        </div>
+
+
+
+    </div>
+
+
+    </div>
+
+@section scripts{
+    <script>
+        var i = 1;
+        function contadormas() {
+            if (cant < @Model.Cantidad) {
+
+                i = i + 1;
+                var cant = document.getElementById("cantidad");
+                cant.value = i;
+                if (cant.value == 1) {
+                    i = 1;
+                    cant.value = "unica";
+                }
+            }
+            else {
+                alert("No hay mas articulos")
+            }
+        }
+        function contadormenos() {
+            if (i >= 2) {
+                i = i - 1;
+                var cant = document.getElementById("cantidad");
+                cant.value = i;
+                if (cant.value == 1) {
+                    i = 1;
+                    cant.value = "1";
+                }
+            }
+        }
+
+
+
+
+        $(function () {
+
+            $("#bnAnadir").on("click", function () {
+                var t = $(this);
+
+                $.post("/web/AnadirAlCarrito", { Id: t.data("id") }, function (r) {
+                    t.html('Añadido');
+                });
+            });
+
+        });
+
+    </script>
+}

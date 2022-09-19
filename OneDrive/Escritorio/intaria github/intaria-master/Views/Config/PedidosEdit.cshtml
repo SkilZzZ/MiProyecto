@@ -1,0 +1,269 @@
+﻿@model Intaria.Models.Pedidos
+@{
+    List<Intaria.Models.Usuarios> listaClientes = ViewBag.listaClientes;
+    List<Intaria.Models.Articulo> ListaArticulos = ViewBag.listaArticulos;
+    List<Intaria.Models.Pedidos_Articulos> listaPedidos_Articulos = ViewBag.listaPedidos_Articulos;
+    List<Intaria.Models.Articulo> prueba = ViewBag.prueba;
+    List<Intaria.Models.Fotos> listaFotos = ViewBag.listaFotos;
+    List<Intaria.Models.Categoria> ListaCategorias = ViewBag.ListaCategorias;
+
+    var busqueda = ViewBag.busqueda;
+
+    var totalArticulos = ViewBag.totalArticulos;
+    var totalPagina = ViewBag.totalPagina;
+    var pagina = ViewBag.pagina;
+
+}
+
+
+<div class="div-cat-art-ped   table-responsive">
+
+    <h1>@(Model.Id == Guid.Empty ? "Preparacion del" : "Editar") Pedido<i style="font-size:25px;color:blue">@(Model.CreadoPorMi == "creado-por-mi" ? "(Creado por mi)" : "") </i></h1>
+
+    <form method="POST" name="pri" id="pri"  onsubmit="myFunction()" enctype="multipart/form-data">
+
+        <h3>Estado actual</h3><br />
+        <div class="d-flex">
+
+            <div style="font-size:15.3px;">
+
+                <input type="radio" id="estado1" name="estado" value="PosibleVenta">
+                <img style="width:24px" src="~/iconos/posibleventa.png" />
+                <label for="estado1">PosibleVenta&nbsp;&nbsp;</label>
+
+                <input type="radio" id="estado2" name="estado" value="Vendido">
+                <img style="width: 24px" src="~/iconos/vendido.png" />
+                <label for="estado2">Vendido&nbsp;&nbsp;</label>
+
+                <input type="radio" id="estado3" name="estado" value="Enviado">
+                <img style="width: 24px" src="~/iconos/enviado.png" />
+                <label for="estado3">Enviado&nbsp;&nbsp</label>
+
+                <input type="radio" id="estado4" name="estado" value="Entregado">
+                <img style="width: 24px" src="~/iconos/producto.png" />
+                <label for="estado4">Entregado&nbsp;&nbsp;</label>
+            </div>
+        </div>
+        <br />
+
+
+
+        <div class="form-group">
+            <h3>Forma de pago</h3><br />
+
+            <input type="radio" id="FormaPago" name="FormaPago" value="paypal "><img style="width:20px;" src="~/iconos/paypal.png" />paypal&nbsp;
+            <input type="radio" id="FormaPago" name="FormaPago" value="tarjeta">&nbsp;<i class="fas fa-money-check"> </i> tarjeta&nbsp;
+            <input type="radio" id="FormaPago" name="FormaPago" value="transferencia"> <img style="width:20px;" class="iconos" src="~/iconos/transferencia.png" /> transferencia&nbsp;
+            <input type="radio" id="FormaPago" name="FormaPago" value="efectivo">&nbsp;<i style="color:forestgreen" class="fas fa-money-bill-wave"></i> efectivo
+            <input type="radio" id="FormaPago" name="FormaPago" value="otros"> <img style="width:20px;" class="iconootro" src="~/iconos/financiero.png" /><label for="other"> Otros</label>
+        </div>
+
+
+        <div class="form-group">
+            <h3>Nombre del cliente</h3><br />
+            <select style="width:450px;" type="text" class="form-control" id="IdUsuario" name="IdUsuario" aria-describedby="categoriaPadreHelp" placeholder="IdCategoria" data-val-required="Debes seleccionar una categoria" data-val="true">
+                <option value="">- Ninguna -</option>
+                @foreach (Intaria.Models.Usuarios cat in listaClientes)
+                {
+                    if (cat.UserId == Model.IdUsuario)
+                    {
+                        <option value="@cat.UserId" selected>@cat.Nombre</option>
+                    }
+                    else
+                    {
+                        <option value="@cat.UserId">@cat.Nombre</option>
+                    }
+
+                }
+            </select>
+        </div>
+
+
+
+        @if (Model.Id == Guid.Empty)
+        {
+            <div id="btn-add-art">
+                <a href="#" class="btn btn-primary" id="bnAnadirArticulos">Añadir Artículos</a>
+            </div>
+        }
+
+        <h3>Articulos del pedido</h3>
+
+
+        <table class="table table-hover tblQuitar" style="width:650px;padding: 35px;">
+            <thead style=" background: rgb(206 247 255); margin-left:-20px; ">
+                <tr>
+                    <th></th>
+                    <th style="font-size:15px;">Nombre</th>
+                    <th style="font-size:15px;">Descripción</th>
+                    <th style="font-size:15px;">Categoría</th>
+                    <th style="font-size:15px;">Precio</th>
+                    <th style="width:40px"></th>
+                    <th style="width:40px"></th>
+
+                </tr>
+            </thead>
+            <tbody id="resultado-articulos">
+                @foreach (var arti_ped in listaPedidos_Articulos)
+                {
+
+                    if (Model.Id == arti_ped.IdPedido)
+                    {
+                        @foreach (var arti in prueba)
+                        {
+                            if (arti_ped.IdArticulo == arti.Id)
+                            {
+                <tr class="suma">
+                    <td>
+                        @foreach (var foto in listaFotos)
+                        {
+                            if (foto.IdArticulo == arti.Id)
+                            {<img class="img-art" src="/fotos/@arti.Id/@foto.NombreArchivo" title="@foto.NombreArchivo" style="display:block; min-width:50px; max-width:50px; width:100%; max-height:50px;" />}
+                        }
+                    </td>
+
+                    <td style="max-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">@arti.Nombre</td>
+
+                    <td style="max-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">@arti.Descripcion</td>
+
+                    <td>@foreach (Intaria.Models.Categoria cat in ListaCategorias){ if (cat.Id == arti.IdCategoria){<p>@cat.Nombre</p>} }</td>
+
+                    <td>@arti.Precio.ToString("#.00") €</td>
+
+                    <td><a href="#" class="btn btn-sm btn-danger bnQuitarArticulo"><i class="fa fa-trash"></i></a></td>
+
+                </tr>
+                            }
+                        }}
+                }
+
+
+            </tbody>
+
+
+        </table>
+
+
+
+        <table>
+
+            <tr class="total">
+                <td>El valor total es de: </td>
+                <td></td>
+                <td>€</td>
+            </tr>
+        </table>
+
+        <p>@Model.Id</p>
+
+
+
+        <br />
+
+        <div class="form-group">
+            <h3>Venta Total</h3>
+            <br />
+            <input type="number" id="preciototal" name="preciototal" placeholder="venta total" step="0.01" value="@Model.Total" />
+            <span class="euro">
+                <strong> EUR </strong>
+            </span>
+            <small data-valmsg-for="preciototal" data-valmsg-replace="true" id="preciototalHelp" class="form-text text-muted"></small>
+        </div>
+
+
+        <br />
+        <a href="/Config/pedidos" class="btn btn-secondary">Volver</a>
+        <button type="submit" class="btn btn-primary" >@(Model.Id == Guid.Empty ? "Guardar" : "Actualizar")</button>
+
+
+        <input type="text" size ="100" name="articulos" id="articulos" />
+    </form>
+
+    <input value="@Model.Id" type="hidden" id="userInput" />
+
+
+
+    @section scripts {
+
+
+        <script>
+           
+           // var idpedido = '@Model.Id'
+            // var URLactual = location.pathname;
+            // if (idpedido != '00000000-0000-0000-0000-000000000000' && URLactual=='/Config/PedidosEdit') {
+             //   window.location = '/Config/PedidosEdit/'+idpedido;
+            //}
+
+
+
+
+           
+
+
+            //mostrar el valor checkeado
+             document.querySelector('[value="@Model.Estado"]').checked = true;
+             document.querySelector('[value="@Model.FormaPago"]').checked = true;
+
+            // funcion busqueda
+
+            $(function () {
+                var debounceTimeout = null;
+                $("#search-q").on("keyup change", function () {
+                    var t = $(this);
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(function () {
+                        var v = t.val();
+                        if (v.length < 3 && v.length > 0) return;
+                        search(v);
+                    }, 500);
+                });
+
+                $("#bnAnadirArticulos").on("click", function (e) {
+                    e.preventDefault();
+                    showModal('/config/BuscarArticulosModal', 'mdlArticulo');
+                });
+
+                $("#resultado-articulos").on("click", ".bnQuitarArticulo", function () {
+                    var t = $(this);
+                    var tr = t.closest("tr").remove();
+                });
+
+
+
+            })
+
+
+
+            function search(q) {
+                $("#frm-buscar input").val(q);
+                $("#frm-buscar").submit();
+            }
+        </script>
+
+    }
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+
+            var totalA = 0;
+            //repetir por columna, o usa un array
+            $('.suma').map(function (k, v) {
+                totalA = totalA + parseInt($(this).children('td:eq(4)').text());
+                //repetir por columna o llena un array
+            })
+            $('.total').children('td:eq(1)').text(totalA);
+
+        });
+
+
+
+    </script>
+
+
+</div>
+

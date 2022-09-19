@@ -1,0 +1,245 @@
+﻿@{ var mensajeerror = ViewBag.mensajeerror;
+    var ErrorRegistro = ViewBag.ErrorRegistro;
+    var UsuarioRegistrado = ViewBag.UsuarioRegistrado;
+    }
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Google setup-->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+
+    <title>Login or register</title>
+    <style>
+        body {
+            background: #EFEFEF;
+        }
+
+        :root {
+            --color-dark: #EFEFEF;
+        }
+
+        .bg-dark {
+            background-color: var(--color-dark) !important;
+        }
+
+        .form-control {
+            background-color: #DCDCDC;
+            border: 2px solid #DCDCDC;
+            border-radius: 1rem;
+            padding: 1.5rem 1rem;
+        }
+
+        .btn {
+            font-weight: 400;
+            padding: 1rem 2rem;
+            border-radius: 4rem;
+            min-width: 10rem;
+        }
+
+    .register-bg { background-image: url('https://pbs.twimg.com/media/Eev5tRjWkAIfJvL.jpg'); 
+                   background-size: cover;
+                   background-repeat: no-repeat; 
+                   min-height: 70vh; }
+
+        .btn-primary {
+            margin-top: -20px;
+        }
+    </style>
+</head>
+
+
+@{
+    if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-warning">@ViewBag.Message</div>
+    }
+}
+<body>
+
+    <section class="contact-box">
+
+        <div class="row no-gutters">
+            <div class="col-sm col-lg-4 register-bg">
+
+            </div>
+            <div class="col-xl-3 d-flex log   offset-md-0.1 loginput" >
+
+                    <div class="container">
+                        <div class="form-group">
+                            <h1 class="font-weight-bold mb-4">LOGIN</h1>
+                            <div class="form-group mb-3">
+                                <p><label class="font-weight-bold">You can login with:</label></p>
+
+                                <div class="form-group">
+
+                                    <div id="botongoogle" asp-action="Loget" class="g-signin2" data-onsuccess="onSignIn" data-font="50" data-width="240" data-longtitle="true" style="margin-bottom:5px"></div>
+
+                                    <div scope="public_profile,email" onlogin="testAPI();" class="fb-login-button" data-width="" data-size="large" data-button-type="login_with" data-layout="default" data-use-continue-as="false" width="155"></div>
+
+                                </div>
+                            </div>
+
+                            <form method="POST" name="pri" id="pri">
+
+                                <input type="hidden" name="inputlogin" value="forminputlog" />
+
+                                <div class="form-group">
+                                    <label class="font-weight-bold"> email <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="nombre" aria-describedby="nombreHelp" placeholder=" email" value="" data-val-required="Este campo no puede estar en blanco." data-val="true">
+                                </div>
+
+                                <div class="form-group  mb-3 ">
+                                    <label class="font-weight-bold">Password <span class="text-danger">*</span></label>
+                                    <input type="password" name="clave" class="form-control" placeholder="Password">
+                                </div>
+
+
+
+
+
+
+
+                                <div class="form-group mb-5">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox">
+                                        <label class="form-check-label text-muted">Remember me</label>
+                                    </div>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </form>
+                            <h3 style="color:red">@mensajeerror</h3>
+
+                        </div>
+                    </div>
+            </div>
+            <div class="reg">
+
+                <div class="container align-self-center p-6">
+                    <h1 class="font-weight-bold mb-4">CREATE YOUR FREE ACCOUNT</h1>
+                    <div class="form-group mb-3">
+
+                        <form method="POST" name="seg" id="seg">
+
+                            <input type="hidden" name="inputreg" value="forminputreg" />
+
+
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">Email <span class="text-danger">*</span></label>
+                                <input type="email" name="email" class="form-control" placeholder="Email ">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">Password <span class="text-danger">*</span></label>
+                                <input type="password" name="clave1" class="form-control" placeholder="Password">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="font-weight-bold">Repeat password <span class="text-danger">*</span></label>
+                                <input type="password" name="clave2" class="form-control" placeholder="Password">
+                            </div>
+                            <div class="form-group mb-5">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                    <label class="form-check-label text-muted">By selecting this box you accept our privacy notice and the terms and conditions</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-8">
+
+                                <button class="btn btn-primary width-100">Sign up</button>
+                            </div>
+
+                        </form>
+                        <h3 style="color:blue">@UsuarioRegistrado</h3>
+
+                        <h3 style="color:red">@ErrorRegistro</h3>
+
+                    </div>
+
+                </div>
+            </div>
+            </div>
+    </section>
+
+
+
+
+</body>
+</html>
+
+
+<meta name="google-signin-client_id" content="197361212751-5m16tk45p3kbneme8j2d9soom36k71d2.apps.googleusercontent.com">
+
+
+@section scripts  {
+
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+    <script>
+        var x = 0;
+
+
+
+        function onSignIn(googleUser) {
+            x = x + 1;
+            if (x > 1) {
+                var profile = googleUser.getBasicProfile();
+                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+                
+                $.post("/Account/Login", { Nombregoogle: profile.getName(), Emailgoogle: profile.getEmail(), logingoogle: "si"
+                }, function () {
+                    document.location = "/"
+                });
+            }
+        }
+
+
+
+
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '819444732221911',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v8.0'
+            });
+        };
+
+
+        function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+            FB.api('/me', 'GET',
+                { "fields": "email, first_name" },
+                function (response) {
+                    usrNombre = response.first_name;
+                    usrCorreo = response.email;
+
+                    console.log('Good to see you, ' + usrNombre + '     ' + usrCorreo);
+
+
+                    $.post("/Account/Login", {
+                        NombreFacebook: usrNombre, EmailFacebook: usrCorreo, loginFacebook: "si"
+                    }, function () {
+                        document.location = "/"
+                    });
+
+                });
+        }
+
+
+
+
+    </script>
+
+}
