@@ -26,10 +26,7 @@ namespace Intaria.Controllers
     public class WebController : Controller
     {
 
-        public Database _db = new Database("Server = localhost; Database=intaria;Trusted_Connection=True;");
-
-
-
+        public Database _db = new Database("Server = (localdb)\\mssqllocaldb; Database=intaria;Trusted_Connection=True;");
 
         private readonly IWebHostEnvironment _env;
 
