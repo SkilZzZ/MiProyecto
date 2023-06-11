@@ -28,7 +28,6 @@ namespace Intaria
 
             services.Configure<GoogleConfigModel>(Configuration.GetSection(GoogleConfigModel.GoogleConfig));
 
-
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
@@ -38,6 +37,8 @@ namespace Intaria
                 options.Cookie.Name = ".intaria.Session";
 
             });
+
+            
 
 
 
@@ -55,17 +56,11 @@ namespace Intaria
 
             services.AddHttpContextAccessor();
 
-
-
-
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
-
-
-
 
         }
 

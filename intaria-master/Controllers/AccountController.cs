@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using qDatabase;
 
 namespace CookieDemo.Controllers
@@ -17,10 +18,14 @@ namespace CookieDemo.Controllers
 
     public class AccountController : Controller
     {
+        private readonly IConfiguration _config;
+        
+        public AccountController(IConfiguration config)
+        {
+            this._config = config;
+        }
 
-
-
-        public Database _db = new Database("Server = localhost; Database=intaria;Trusted_Connection=True;");
+       
 
         /*
         private SignInManager<Usuarios> signInManager;
@@ -37,26 +42,21 @@ namespace CookieDemo.Controllers
         public IActionResult Login(string nombre, string clave, string inputlogin, string inputreg, string email, string clave1, string clave2, string Nombregoogle, string Emailgoogle, string logingoogle, string NombreFacebook, string EmailFacebook, string loginFacebook)
         {
 
-        
+           Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
 
             /* Inicio de sesión en google*/
             if (logingoogle == "si" )
             {
 
-   
-
                 ClaimsIdentity identity = null;
                 bool isAuthenticated = false;
-
                 var existeemail = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Email] = @email", new Dictionary<string, object>() { { "@email", Emailgoogle } });
-
 
 
                 if (existeemail == null)
                 {
 
                     var existenombre = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Nombre] = @nombre", new Dictionary<string, object>() { { "@nombre", Nombregoogle } });
-
 
                     if (existenombre != null)
                     {
@@ -70,8 +70,7 @@ namespace CookieDemo.Controllers
                         foreach (byte byteValue in bytes)
                         {
 
-
-                            Nombregoogle = Nombregoogle + byteValue;
+                            Nombregoogle += byteValue;
                         }
                     }
 
@@ -89,9 +88,6 @@ namespace CookieDemo.Controllers
                 }
 
 
-
-
-
                 //Create the identity for the user
                 identity = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, Nombregoogle),
@@ -99,8 +95,6 @@ namespace CookieDemo.Controllers
                 }, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 isAuthenticated = true;
-
-
 
 
                 if (isAuthenticated)

@@ -6,15 +6,8 @@ using Intaria.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using qDatabase;
-
-
-
-
-
-
-
-
 
 
 namespace Intaria.Controllers
@@ -23,9 +16,15 @@ namespace Intaria.Controllers
     public class ConfigController : Controller
     {
         // public Database _db = new Database("Server=intariam.database.windows.net;Database=intaria;User ID=SAINTARIA; Password=intariamilitariA!12");
-        public Database _db = new Database("Server = localhost; Database=intaria;Trusted_Connection=True;");
+        //public Database _db = new Database("Server = (localdb)//mssqllocaldb; Database=Intaria2;Trusted_Connection=True;");
         private readonly IWebHostEnvironment _env;
+        private readonly IConfiguration _config;
 
+        public ConfigController(IConfiguration config)
+        {
+            this._config = config;
+        }
+                
 
         public ConfigController(IWebHostEnvironment env)
         {
@@ -37,6 +36,7 @@ namespace Intaria.Controllers
         #region index
         public IActionResult Index()
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
 
             var Totalpedidos = _db.GetRecords<Pedidos>("SELECT * FROM Pedidos");
 
@@ -60,6 +60,8 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult Categorias(string Id, string q)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             if (!string.IsNullOrEmpty(Id))
             {
                 _db.ExecuteSQL("delete  FROM [categorias] where [id]= @Id", new Dictionary<string, object>() {
@@ -75,6 +77,7 @@ namespace Intaria.Controllers
         public IActionResult Categorias(string q, int pagina = 0)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             const int ppp = 6;
             int offset = ppp * pagina;
 
@@ -99,6 +102,7 @@ namespace Intaria.Controllers
         public IActionResult CategoriasEdit(string Id)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             var categoria = _db.GetRecords<Categoria>("SELECT * FROM [categorias] WHERE [Id] = @Id",
                 new Dictionary<string, object>() {
               { "@Id", Id}
@@ -126,6 +130,7 @@ namespace Intaria.Controllers
         public IActionResult CategoriasEdit(string Id, string nombre, string descripcion, string categoriaPadre)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             if (string.IsNullOrEmpty(Id) || Guid.Parse(Id) == Guid.Empty)
             {
 
@@ -164,6 +169,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult Articulos(string Id, string q)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             if (!string.IsNullOrEmpty(Id))
             {
                 _db.ExecuteSQL("delete  FROM [fotos] where [IdArticulo]= @Id", new Dictionary<string, object>() {
@@ -180,6 +186,7 @@ namespace Intaria.Controllers
 
         public IActionResult Articulos(string q, int pagina = 0)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             const int ppp = 5;
             int offset = ppp * pagina;
 
@@ -214,6 +221,7 @@ namespace Intaria.Controllers
         public IActionResult ArticulosEdit(String Id)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             var articulo = _db.GetRecords<Articulo>("SELECT * FROM [articulos] WHERE [Id] = @Id",
                 new Dictionary<string, object>() {
                 { "@Id", Id}
@@ -248,6 +256,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult ArticulosEdit(string Id, string nombre, string descripcion, string IdCategoria, int Precio, int Cantidad)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             if (string.IsNullOrEmpty(Id) || Guid.Parse(Id) == Guid.Empty)
             {
                 _db.ExecuteSQL("INSERT INTO [Articulos] ([Nombre], [Descripcion], [IdCategoria],[Precio],[Cantidad], [Estado]) VALUES (@Nombre, @Descripcion, @IdCategoria,@precio,@cantidad, @estado)", new Dictionary<string, object>() {
@@ -309,6 +318,7 @@ namespace Intaria.Controllers
         public IActionResult BorrarFoto(String Id)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             var foto = _db.GetRecords<Fotos>("SELECT * FROM FOTOS WHERE Id = @Id", new Dictionary<string, object>() {
                 { "@Id", Id}
             }).First();
@@ -362,6 +372,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult Clientes(string UserId, string q)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             if (!string.IsNullOrEmpty(UserId))
             {
                 _db.ExecuteSQL("delete  FROM [pedidos] where [IdUsuario]= @userid", new Dictionary<string, object>() {
@@ -380,6 +391,7 @@ namespace Intaria.Controllers
         public IActionResult Clientes(string q, int pagina = 0)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             const int ppp = 5;
             int offset = ppp * pagina;
 
@@ -410,6 +422,7 @@ namespace Intaria.Controllers
         public IActionResult ClientesEdit(string Id)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             var ListaUsuarios = _db.GetRecords<Usuarios>("SELECT * FROM [Usuarios] WHERE [UserId] = @UserId",
                 new Dictionary<string, object>() {
                 { "@UserId", Id}
@@ -428,6 +441,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult ClientesEdit(string UserId, string Nombre, string Email, int Telefono, string pais, string Provincia, string Localidad, string Direccion, string OtraDireccion, int CodigoPostal)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             if (string.IsNullOrEmpty(UserId) || Guid.Parse(UserId) == Guid.Empty)
             {
                 var existe = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Email] = @email", new Dictionary<string, object>() { { "@email", Email } });
@@ -489,6 +503,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult Pedidos(string Id, string q)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             if (!string.IsNullOrEmpty(Id))
             {
                 _db.ExecuteSQL("delete  FROM [Pedidos] where [id]= @Id", new Dictionary<string, object>() {
@@ -501,6 +516,7 @@ namespace Intaria.Controllers
 
         public IActionResult Pedidos(string q, int pagina = 0)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             const int ppp = 5;
             int offset = ppp * pagina;
 
@@ -528,6 +544,7 @@ namespace Intaria.Controllers
         public PartialViewResult BuscarArticulosResultado(string q)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             var articulos = _db.GetRecords<Articulo>(@"select A.*,  F.NombreArchivo from [Articulos] A
                                                         OUTER APPLY(SELECT TOP 1 * FROM[Fotos] F WHERE F.IdArticulo = A.Id) F  "
                                                + (!string.IsNullOrEmpty(q) ? "WHERE A.Nombre like '%" + q.Replace("'", "''") + "%'" : ""));
@@ -545,6 +562,7 @@ namespace Intaria.Controllers
         [HttpGet]
         public IActionResult PedidosEdit(string Id, string q, int pagina = 0)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             const int ppp = 8;
             int offset = ppp * pagina;
 
@@ -597,6 +615,8 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult PedidosEdit(string Id, string Estado, string FormaPago, string IdUsuario, decimal preciototal, string q, string articulos, double acumulador = 0)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+
             //busqueda
             if (q != null /* || q == null*/ )
             {
@@ -684,6 +704,7 @@ namespace Intaria.Controllers
         [HttpGet]
         public IActionResult Carousel()
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
 
             var carousel = _db.GetRecords<Carousel>(@"select * from carousel order by CreatedOn desc");
 
@@ -694,6 +715,7 @@ namespace Intaria.Controllers
         public IActionResult Carousel(string Id)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             _db.ExecuteSQL("delete  FROM [carousel] where [id]= @Id", new Dictionary<string, object>() {
                 { "@Id", Id}
             });
@@ -707,6 +729,7 @@ namespace Intaria.Controllers
         [HttpGet]
         public IActionResult CarouselEdit(string Id)
         {
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             var carousel = _db.GetRecords<Carousel>("SELECT * FROM [Carousel] WHERE [Id] = @id",
                 new Dictionary<string, object>() {
                 { "@id", Id}
@@ -722,14 +745,11 @@ namespace Intaria.Controllers
         }
 
 
-
-
-
-
         [HttpPost]
         public IActionResult CarouselEdit(string Id, string titulo, string descripcion)
         {
 
+            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
             foreach (var file in Request.Form.Files)
             {
                 if (!System.IO.Directory.Exists(_env.WebRootPath + "/imagenes-carousel/"))
