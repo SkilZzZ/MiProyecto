@@ -37,39 +37,25 @@ namespace CookieDemo.Controllers
         public IActionResult Login(string nombre, string clave, string inputlogin, string inputreg, string email, string clave1, string clave2, string Nombregoogle, string Emailgoogle, string logingoogle, string NombreFacebook, string EmailFacebook, string loginFacebook)
         {
 
-            string NombregoogleorFace = "";
-            string Emailfaceorgoogle = "";
-
+        
 
             /* Inicio de sesión en google*/
-            if (logingoogle == "si" || loginFacebook == "si")
+            if (logingoogle == "si" )
             {
 
-                if (logingoogle == "si")
-                {
-
-                    Emailfaceorgoogle = Emailgoogle;
-                    NombregoogleorFace = Nombregoogle;
-
-                }
-                else
-                {
-                    Emailfaceorgoogle = EmailFacebook;
-                    NombregoogleorFace = NombreFacebook;
-
-                }
+   
 
                 ClaimsIdentity identity = null;
                 bool isAuthenticated = false;
 
-                var existeemail = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Email] = @email", new Dictionary<string, object>() { { "@email", Emailfaceorgoogle } });
+                var existeemail = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Email] = @email", new Dictionary<string, object>() { { "@email", Emailgoogle } });
 
 
 
                 if (existeemail == null)
                 {
 
-                    var existenombre = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Nombre] = @nombre", new Dictionary<string, object>() { { "@nombre", NombregoogleorFace } });
+                    var existenombre = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Nombre] = @nombre", new Dictionary<string, object>() { { "@nombre", Nombregoogle } });
 
 
                     if (existenombre != null)
@@ -85,20 +71,20 @@ namespace CookieDemo.Controllers
                         {
 
 
-                            NombregoogleorFace = NombregoogleorFace + byteValue;
+                            Nombregoogle = Nombregoogle + byteValue;
                         }
                     }
 
                     _db.ExecuteSQL("INSERT INTO [Usuarios]([Nombre],[Email],[CreadoPorMi]) values (@nombre,@email,'no')", new Dictionary<string, object>() {
-                    { "@nombre",NombregoogleorFace },
-                    { "@email",Emailfaceorgoogle },
+                    { "@nombre",Nombregoogle },
+                    { "@email",Emailgoogle },
                 });
 
                 }
                 else
                 {
                     var nombreusuario = Convert.ToString(_db.ExecuteScalar("SELECT Nombre FROM [usuarios] WHERE [email] = @emailgoogle or  [email] = @emailfacebook", new Dictionary<string, object>() { { "@emailgoogle", Emailgoogle }, { "@emailfacebook", EmailFacebook } }));
-                    NombregoogleorFace = nombreusuario;
+                    Nombregoogle = nombreusuario;
 
                 }
 
@@ -108,7 +94,7 @@ namespace CookieDemo.Controllers
 
                 //Create the identity for the user
                 identity = new ClaimsIdentity(new[] {
-                    new Claim(ClaimTypes.Name, NombregoogleorFace),
+                    new Claim(ClaimTypes.Name, Nombregoogle),
                     new Claim(ClaimTypes.Role, "User")
                 }, CookieAuthenticationDefaults.AuthenticationScheme);
 

@@ -408,33 +408,21 @@ namespace Intaria.Controllers
 
 
 
-        [Route("contact")]
+        [Route("Contact")]
+
         [HttpPost]
-
-        public IActionResult Contacto(LoginViewModel model)
+        public IActionResult Contact(LoginViewModel LoginViewModel)
         {
-
-            var isValid = IsReCaptchValidV3(model.captcha);
-            if (isValid)
+            if (ModelState.IsValid)
             {
-                /*
+                string EmailOrigen = "intariamilitaria@compramosmedallasycondecoraciones.es";
+                string EmailDestino = "intariamilitaria@compramosmedallasycondecoraciones.es";
+                string Contraseña = "ionosmierda";
 
 
-                                  System.IO.File.AppendAllText("c:\\temp\\error_log.txt", "CONTACTO" + Environment.NewLine + Environment.NewLine);
-                     try
-
-                //string[] filePaths = Directory.GetFiles("wwwroot/imagenes-contacto/");
-                //foreach (string filePath in filePaths)
-                //System.IO.File.Delete(filePath);
-                */
-
-                string EmailOrigen = "xxxxxxxxx@gmail.com";
-                string EmailDestino = "xxxxxxxxxx@gmail.com";
-                string Contraseña = "xxxxxxx";
-
-
-                var mensaje = "Nombre: " + model.name + " <br> Email: " + model.email + "  <br> tfno:" + model.phone + "<br><br>" + model.message + "<br><br><br>captcha" + model.captcha;
+                var mensaje = "Nombre: " + LoginViewModel.Name + " <br> Email: " + LoginViewModel.Email + "  <br> tfno:" + LoginViewModel.Phone + "<br><br>" + LoginViewModel.Message + "<br><br><br>captcha" + LoginViewModel.Token;
                 MailMessage omailMessage = new MailMessage(EmailOrigen, EmailDestino, "Contacto pagina", mensaje);
+
 
                 foreach (var file in Request.Form.Files)
                 {
@@ -445,21 +433,23 @@ namespace Intaria.Controllers
 
                 omailMessage.IsBodyHtml = true;
 
-                SmtpClient oSmtpClient = new SmtpClient("smtp.gmail.com");
+                SmtpClient oSmtpClient = new SmtpClient("smtp.ionos.es");
+                // ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
                 oSmtpClient.EnableSsl = true;
+                oSmtpClient.Port = 587;
                 oSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 oSmtpClient.UseDefaultCredentials = false;
-                oSmtpClient.Port = 587;
                 oSmtpClient.Credentials = new System.Net.NetworkCredential(EmailOrigen, Contraseña);
                 oSmtpClient.Send(omailMessage);
                 oSmtpClient.Dispose();
 
-                Response.Redirect("Contact");
+                ViewBag.ClearFields = true;
+
+
+
             }
-
             return View();
-
-
         }
 
         private bool IsReCaptchValidV3(string captchaResponse)
