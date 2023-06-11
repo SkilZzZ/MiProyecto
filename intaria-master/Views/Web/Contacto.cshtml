@@ -1,10 +1,14 @@
-﻿@model LoginViewModel
+﻿@using Compraintariamilitaria.Models;
+@using Microsoft.Extensions.Options
+
+@model LoginViewModel
 
 @{
-                @inject Microsoft.Extensions.Options.IOptions<GoogleConfigModel> googleConfig
-                var EmailUsuariologeado = ViewBag.EmailUsuariologeado;
-                var telefonoUsuariologeado = ViewBag.telefonoUsuariologeado; }
-
+    ViewData["Title"] = "Contact";
+}
+@using Microsoft.Extensions.Configuration
+@using Intaria
+@inject IOptions<GoogleCaptchaConfig> GoogleCaptchaConfig
 
 
 <head>
@@ -23,6 +27,9 @@
 
 
 </head>
+
+
+
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Inicio</a></li>
@@ -58,69 +65,70 @@
         </div>
     </div>
     <div class="col-sm col-lg-4">
-        <form class="form-horizontal" method="POST" name="pri" id="LoginForm" asp-action="Contacto" enctype="multipart/form-data">
+        <form class="form-horizontal" name="pri" id="LoginForm" asp-action="Contact" enctype="multipart/form-data">
+            <input type="hidden" id="LoginViewModel" asp-for="Token" value="" />
             <fieldset>
                 <h2>Send us a message</h2>
 
-                @if (User.Identity.Name == null)
-                {
-    <p>Fill the form below to send as a message through the website.</p>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Enter your name here..." aria-label="Enter your name here..." aria-describedby="basic-addon1" name="name">
-
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
                     </div>
+                    <input type="text" class="form-control" placeholder="Enter your name here..." aria-describedby="basic-addon1" id="name" asp-for="Name" name="Name">
+                </div>
 
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope-o"></i></span>
-                                        </div>
-                                        <input type="text" class="form-control" id="asd" placeholder="Enter your email here..." aria-label="Enter your email here..." aria-describedby="basic-addon1" name="email">
 
-                                    </div>
 
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone"></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control" placeholder="Enter your phone here..." aria-label="Enter your phone here..." aria-describedby="basic-addon1" name="phone">
 
-                                                    </div> }
-                                                else
-                                                {
 
-                                    <input class="nomodificaremail" type="hidden" value="@EmailUsuariologeado" name="email">
-                                     <input class="nomodificartelefono" type="hidden" value="@telefonoUsuariologeado" name="phone">}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope-o"></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Enter your email here..." aria-describedby="basic-addon1" id="email" asp-for="Email" name="Email">
+                </div>
+
+
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone"></i></span>
+                    </div>
+                    <input type="text" id="phone" class="form-control" placeholder="Enter your phone here..." asp-for="Phone" aria-describedby="basic-addon1" oninput="validateNumber(this)" name="Phone">
+                </div>
 
 
                 <div class="form-group">
                     <label for="exampleFormControlTextarea1">Message</label>
-                    <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Enter your message here"></textarea>
+                    <textarea name="Message" class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Enter your message here"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <div class="input-group-prepend botonInputFileModificado">
-                        <input name="enviarfiles" type="file" accept=".jpeg,.jpg,.png" multiple class="with-preview inputImagenOculto" />
-                        <i><span class="iconify" data-icon="fa-solid:folder-open" data-inline="false"></span> Browser...</i>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-upload"></i></span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input with-preview" accept=".jpeg,.jpg,.png" multiple>
+                            <label class="custom-file-label" for="enviarfiles">Seleccionar archivos</label>
+                        </div>
                     </div>
                 </div>
+
+
+
+
 
                 <div class="form-group">
                     <div class="input-group-prepend">
                         <div id="myList"></div>
                     </div>
                 </div>
-                <input type="hidden" asp-for="captcha" />
 
 
-                <button class="g-recaptcha btn btn-primary btn-lg"
-                        data-sitekey="@googleConfig.Value.Key"
-                        data-callback='onSubmit'
-                        data-action='submit'>
-                    Send
-                </button>
+                <a href="#" class="g-recaptcha btn btn-primary btn-lg" onclick="ValidacionContacto();">
+                    Enviar
+                </a>
 
 
 
@@ -130,6 +138,7 @@
     </div>
 
 </div>
+
 
 
 
@@ -152,5 +161,42 @@
 </script>
 
 
+<script src="https://www.google.com/recaptcha/api.js?render=@GoogleCaptchaConfig.Value.SiteKey"></script>
+
 <script src="https://www.google.com/recaptcha/api.js"></script>
+
+<script>
+    grecaptcha.ready(function () {
+        grecaptcha.execute('@GoogleCaptchaConfig.Value.SiteKey').then(function (token) {
+            // Add your logic to submit to your backend server here.
+            console.log(token);
+            document.getElementById("LoginViewModel").value = token;
+        });
+    });
+
+</script>
+
+
+<script>
+    function validateNumber(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+
+</script>
+
+
+@if (ViewBag.ClearFields != null && ViewBag.ClearFields == true)
+{
+    <script>
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("exampleFormControlTextarea1").value = "";
+    </script>
+}
+
+
+
+
 
