@@ -7,12 +7,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace qDatabase
 {
-    public class Database : IDisposable
+    public class Database :  IDatabase, IDisposable
     {
         private readonly SqlConnection _conn;
         private SqlTransaction _tran;
@@ -22,8 +21,8 @@ namespace qDatabase
         private List<BatchStatement> _batchStatements = null;
 
         public string ConnectionString => _connectionString;
-        public Boolean IsOpen => _conn != null && _conn.State == ConnectionState.Open;
-        public Boolean IsTransaction => _tran != null;
+        public bool IsOpen => _conn != null && _conn.State == ConnectionState.Open;
+        public bool IsTransaction => _tran != null;
 
         public IEnumerable<object> UserProfiles { get; set; }
 
@@ -257,7 +256,7 @@ namespace qDatabase
             Dictionary<string, object> Parameters = new Dictionary<string, object>();
             string query = "INSERT INTO [" + schema + "].[" + tableName + "] (";
             string queryValues = ") VALUES (";
-            foreach(var prop in o.GetType().GetProperties())
+            foreach (var prop in o.GetType().GetProperties())
             {
                 if (table.Columns.Contains(prop.Name))
                 {
@@ -267,7 +266,7 @@ namespace qDatabase
                 }
             }
 
-            query = query.Substring(0, query.Length - 1) + queryValues.Substring(0, queryValues.Length-1) + ")";
+            query = query.Substring(0, query.Length - 1) + queryValues.Substring(0, queryValues.Length - 1) + ")";
 
 
             using (SqlCommand comm = CreateCommand(query, Parameters))
@@ -495,7 +494,7 @@ namespace qDatabase
             }
         }
 
-        
+
 
         private Dictionary<string, Type> GetObjectProperties<T>() where T : class
         {

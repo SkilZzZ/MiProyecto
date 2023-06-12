@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Intaria.Models;
 using Stripe;
+using qDatabase;
 
 namespace Intaria
 {
@@ -38,8 +39,14 @@ namespace Intaria
 
             });
 
-            
-
+            //Servicio personalizados.
+            // Registra la dependencia de Database
+            services.AddScoped(provider =>
+            {
+                var connectionString = provider.GetRequiredService<IConfiguration>()
+                                               .GetConnectionString("DefaultConnection");
+                return new Database(connectionString);
+            });
 
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();

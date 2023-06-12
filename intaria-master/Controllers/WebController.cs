@@ -20,26 +20,28 @@ namespace Intaria.Controllers
     public class WebController : Controller
     {
         private readonly IConfiguration _config;
+        private readonly Database _db;
         private readonly IWebHostEnvironment _env;
         private readonly GoogleConfigModel _googleConfig;
 
         
         public WebController(IWebHostEnvironment env, 
                              IOptions<GoogleConfigModel> googleConfig,
-                             IConfiguration config) : base()
+                             IConfiguration config,
+                             Database db) : base()
         {
             _googleConfig = googleConfig.Value;
             _env = env;
             _config = config;
+            _db = db;
         }
-
 
         /// <summary>
         /// Pagina Principal
         /// </summary>
         public IActionResult Index()
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             //En esta página sólo cargamos las categorias y el carrusel,
             //todo lo demás se carga de forma dinámica utilizando ajax.
             ViewBag.categorias = ordernarLista(Guid.Empty, _db.GetRecords<Categoria>("select distinct(C.nombre),C.* from Categorias C  inner join Articulos A on C.Id=A.IdCategoria" +
@@ -61,7 +63,7 @@ namespace Intaria.Controllers
         public ViewResult Articulo(string id, string q)
         {
             /// ID= ADDSAFASDF-1234
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             var ultcar = id.Substring(id.Length - 4, 4);
             var articulo = _db.GetRecords<Articulo>("SELECT * FROM [articulos] WHERE [Id] like '" + ultcar.Replace("'", "''") + "%'").FirstOrDefault();
 
@@ -86,7 +88,7 @@ namespace Intaria.Controllers
 
         public ActionResult categoriasmenuuu()
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
 
             var Listacategorias = _db.GetRecords<Categoria>(@"select * from categorias");
 
@@ -104,7 +106,7 @@ namespace Intaria.Controllers
         public PartialViewResult Articulos(string otrapagina, string numarticulos, string categoria, string q, int pagina = 0)
         {
 
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             const int ppp = 15;
 
             int offset = ppp * pagina;
@@ -146,7 +148,7 @@ namespace Intaria.Controllers
         public PartialViewResult BuscarArticulosResultado(int otrapagina, string ordenadorpor, int numarticulos, string q, string vainputcat, int pagina)
         {
 
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
 
             var order = "[CreatedOn] DESC ";
 
@@ -212,7 +214,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public JsonResult AnadirAlCarrito(Guid Id, string Remove)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             var carrito = HttpContext.Session.Get<List<Guid>>("CARRITO");
             if (carrito == null || carrito.Count == 0)
             {
@@ -235,7 +237,7 @@ namespace Intaria.Controllers
         [Route("cart")]
         public IActionResult Cesta()
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             var carrito = HttpContext.Session.Get<List<Guid>>("CARRITO");
             if (carrito == null || carrito.Count == 0)
             {
@@ -262,7 +264,7 @@ namespace Intaria.Controllers
         [Route("payment")]
         public IActionResult PagoyEnvio()
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             var carrito = HttpContext.Session.Get<List<Guid>>("CARRITO");
             if (carrito == null || carrito.Count == 0)
             {
@@ -297,7 +299,7 @@ namespace Intaria.Controllers
         [Route("payment")]
         public IActionResult PagoyEnvio(PaymodelView data)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             if (data.TipoPago == "tarjeta")
             {
 
@@ -346,7 +348,7 @@ namespace Intaria.Controllers
 
         public List<JsonTree> ordernarLista(Guid Id, List<Categoria> lista)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection")); 
+             
             var tmp = new List<JsonTree>();
             foreach (var c in lista.Where(W => W.CategoriaPadre == Id))
             {
@@ -381,7 +383,7 @@ namespace Intaria.Controllers
         [Route("contact")]
         public IActionResult Contacto()
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection")); 
+             
             ViewBag.EmailUsuariologeado = _db.ExecuteScalar("SELECT email FROM [Usuarios] WHERE [Nombre] = '" + User.Identity.Name + "'");
             ViewBag.telefonoUsuariologeado = _db.ExecuteScalar("SELECT telefono FROM [Usuarios] WHERE [Nombre] = '" + User.Identity.Name + "'");
 
@@ -402,7 +404,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult Contact(LoginViewModel LoginViewModel)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection")); 
+             
             if (ModelState.IsValid)
             {
                 string EmailOrigen = "intariamilitaria@compramosmedallasycondecoraciones.es";
@@ -444,7 +446,7 @@ namespace Intaria.Controllers
 
         private bool IsReCaptchValidV3(string captchaResponse)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             var result = false;
             var secretKey = _googleConfig.Secret;
             var apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
@@ -477,7 +479,7 @@ namespace Intaria.Controllers
         [Authorize]
         public IActionResult MiCuenta(string valpost)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             ViewBag.existeclave = Convert.ToString(_db.ExecuteScalar("SELECT Clave FROM [Usuarios] WHERE [Nombre] = '" + User.Identity.Name + "'"));
 
 
@@ -509,7 +511,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public IActionResult MiCuenta(string personaldates, string email, string UserId, int Telefono, string pais, string Provincia, string Localidad, string Direccion, string OtraDireccion, int CodigoPostal, string changepass, string createpass, string currentpassword, string newpassword, string repeatpassword)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             if (personaldates == "personaldates")
             {
 
@@ -576,7 +578,7 @@ namespace Intaria.Controllers
         [HttpPost]
         public JsonResult completadopago(string email, string articulos, string cantidad, decimal totalpedido)
         {
-            Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
+            
             Response.Redirect("prueba");
             var carrito = HttpContext.Session.Get<List<Guid>>("CARRITO");
             int cantidadinsertada = 0;

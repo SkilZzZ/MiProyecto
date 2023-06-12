@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Intaria.Models;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using qDatabase;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace CookieDemo.Controllers
 {
@@ -19,10 +13,14 @@ namespace CookieDemo.Controllers
     public class AccountController : Controller
     {
         private readonly IConfiguration _config;
-        
-        public AccountController(IConfiguration config)
+        private readonly Database _db;
+
+        public AccountController(IConfiguration config,
+                                 Database db)
         {
-            this._config = config;
+            _config = config;
+            _db = db;
+      
         }
 
        
@@ -42,14 +40,12 @@ namespace CookieDemo.Controllers
         public IActionResult Login(string nombre, string clave, string inputlogin, string inputreg, string email, string clave1, string clave2, string Nombregoogle, string Emailgoogle, string logingoogle, string NombreFacebook, string EmailFacebook, string loginFacebook)
         {
 
-           Database _db = new Database(_config.GetConnectionString("DefaultConnection"));
-
+      
             /* Inicio de sesión en google*/
             if (logingoogle == "si" )
             {
 
                 ClaimsIdentity identity = null;
-                bool isAuthenticated = false;
                 var existeemail = _db.ExecuteScalar("SELECT UserId FROM [usuarios] WHERE [Email] = @email", new Dictionary<string, object>() { { "@email", Emailgoogle } });
 
 
@@ -94,7 +90,7 @@ namespace CookieDemo.Controllers
                     new Claim(ClaimTypes.Role, "User")
                 }, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                isAuthenticated = true;
+                bool isAuthenticated = true;
 
 
                 if (isAuthenticated)
@@ -106,9 +102,6 @@ namespace CookieDemo.Controllers
                     return RedirectToAction("index", "Web");
                 }
             }
-
-
-
 
             /* Inicio de sesion */
             if (inputlogin == "forminputlog")
